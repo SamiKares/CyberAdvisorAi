@@ -39,11 +39,17 @@
                 <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">1. System Details & Config</h2>
                 
                 <div class="mb-6 bg-gray-50 p-4 rounded border border-gray-300">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="api-url">Local LLM API Endpoint (OpenAI Compatible):</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="api-url">API Endpoint (OpenAI Compatible):</label>
                     <input type="text" id="api-url" value="http://localhost:1234/v1/chat/completions" 
-                        class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
+                        class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm mb-3"
                         placeholder="e.g., http://localhost:1234/v1/chat/completions">
-                    <p class="text-xs text-gray-500 mt-1">Default is for LM Studio. Use http://localhost:11434/v1/chat/completions for Ollama.</p>
+                    
+                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="api-key">API Key (Optional):</label>
+                    <input type="password" id="api-key" 
+                        class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
+                        placeholder="Leave blank for local servers, or enter Bearer token">
+                        
+                    <p class="text-xs text-gray-500 mt-2">Default URL is for LM Studio. Use http://localhost:11434/v1/chat/completions for Ollama.</p>
                 </div>
 
                 <div class="mb-4">
@@ -122,6 +128,7 @@
             const compliance = document.getElementById('compliance').value;
             const techStack = document.getElementById('tech-stack').value.trim();
             const apiUrl = document.getElementById('api-url').value.trim();
+            const apiKey = document.getElementById('api-key').value.trim();
             const outputContent = document.getElementById('output-content');
             const btnSpinner = document.getElementById('btn-spinner');
             const generateBtn = document.getElementById('generate-btn');
@@ -156,20 +163,31 @@
                     { role: "system", content: systemPrompt },
                     { role: "user", content: userMessage }
                 ],
-                temperature: 0.1,
+                temperature: 0.7,
                 max_tokens: 1500
             };
+
+            // Set up request headers, injecting API key if provided
+            const requestHeaders = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (apiKey) {
+                requestHeaders['Authorization'] = `Bearer ${apiKey}`;
+            }
 
             try {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: requestHeaders,
                     body: JSON.stringify(payload)
                 });
 
                 if (!response.ok) {
+                    // Check if it's an auth error specifically
+                    if (response.status === 401) {
+                        throw new Error(`Authentication Failed (401). Check your API Key.`);
+                    }
                     throw new Error(`Server responded with status: ${response.status}`);
                 }
 
@@ -188,10 +206,11 @@
                 console.error("Error connecting to local LLM:", error);
                 outputContent.innerHTML = `
                     <div class="text-red-600">
-                        <strong>⚠️ Connection Error:</strong> Could not connect to the local LLM at <code>${apiUrl}</code>.<br><br>
+                        <strong>⚠️ Connection Error:</strong> ${error.message}<br><br>
                         <strong>Troubleshooting:</strong>
                         <ul class="list-disc ml-6 mt-2">
                             <li>Is your local LLM server (LM Studio, Ollama, etc.) currently running?</li>
+                            <li>If connecting to an external API (like OpenAI or Groq), did you enter a valid API Key?</li>
                             <li>Is the local server configured to accept Cross-Origin Resource Sharing (CORS)?</li>
                             <li>If this page is hosted on GitHub Pages (https), your browser is blocking the request to localhost (http). You must run this HTML file locally on your machine.</li>
                         </ul>
