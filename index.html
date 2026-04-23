@@ -25,9 +25,9 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen text-gray-800 p-4 md:p-8">
+<body class="bg-gray-100 min-h-screen text-gray-800 p-4 md:p-8 flex flex-col">
 
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto flex-grow w-full">
         <header class="mb-8 text-center md:text-left">
             <h1 class="text-4xl font-extrabold text-blue-900 mb-2">🔐 CyberAdvisor AI</h1>
             <p class="text-lg text-gray-600">Your intelligent cybersecurity architect. Tell us what you're building, and we'll tell you how to secure it.</p>
@@ -83,6 +83,10 @@
         </div>
     </div>
 
+    <footer class="mt-12 mb-4 text-center text-sm text-gray-500">
+        <p>&copy; 2026 Erno Niiranen, Senja Vuoristo, and Sami Karesniemi. All rights reserved.</p>
+    </footer>
+
     <script>
         document.getElementById('generate-btn').addEventListener('click', async () => {
             const projectType = document.getElementById('project-type').value;
@@ -124,8 +128,6 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        // Add an Authorization header here if your local server requires an API key
-                        // 'Authorization': 'Bearer YOUR_KEY' 
                     },
                     body: JSON.stringify(payload)
                 });
