@@ -596,42 +596,54 @@
         spinner.style.display = 'block';
         generateBtn.disabled = true;
 
-        let systemPrompt = `You are a senior Cybersecurity Architect with 15+ years of experience. You must ONLY answer in valid JSON format. Do not include any plain text outside the JSON. Use the following exact JSON structure:
-{
-  "project_overview": "brief summary of the system",
-  "compliance_target": "target name",
-  "security_recommendations": [
-    {
-      "category": "e.g., Authentication, Network, Data Protection",
-      "severity": "Critical | High | Medium | Low",
-      "finding": "Short description of the risk",
-      "remediation": "Specific technical fix"
-    }
-  ]
-}`;
+        let systemPrompt = `You are a senior Cybersecurity Architect.`;
         if (compliance !== 'None') {
             systemPrompt += ` Strictly align all recommendations with ${compliance} compliance requirements.`;
         }
 
         const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security architecture review: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
 
-        const payload = {
-            model: 'gemini-2.5-flash',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user',   content: userMessage }
-            ],
-            temperature: 0.2,
-            max_tokens: 2000
+        // 1. Define the Structured Output Schema
+        const securitySchema = {
+            type: "OBJECT",
+            properties: {
+                project_overview: { type: "STRING" },
+                compliance_target: { type: "STRING" },
+                security_recommendations: {
+                    type: "ARRAY",
+                    items: {
+                        type: "OBJECT",
+                        properties: {
+                            category: { type: "STRING", description: "e.g., Authentication, Network, Data Protection" },
+                            severity: { type: "STRING", description: "Critical | High | Medium | Low" },
+                            finding: { type: "STRING", description: "Short description of the risk" },
+                            remediation: { type: "STRING", description: "Specific technical fix" }
+                        },
+                        required: ["category", "severity", "finding", "remediation"]
+                    }
+                }
+            },
+            required: ["project_overview", "compliance_target", "security_recommendations"]
         };
 
-        const headers = { 'Content-Type': 'application/json' };
-        if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+        // 2. Native Gemini Payload
+        const payload = {
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            contents: [{ parts: [{ text: userMessage }] }],
+            generationConfig: {
+                temperature: 0.2,
+                responseMimeType: "application/json",
+                responseSchema: securitySchema
+            }
+        };
+
+        // Note: The key is pulled from your Bearer Token input box and appended to the URL
+        const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         try {
-            const response = await fetch(apiUrl, {
+            const response = await fetch(geminiEndpoint, {
                 method: 'POST',
-                headers,
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
 
@@ -641,17 +653,15 @@
             }
 
             const data = await response.json();
-            const text = data.choices[0].message.content;
-
+            
+            // 3. Extract exact JSON string from Gemini's specific response structure
+            const text = data.candidates[0].content.parts[0].text;
+            
             skeleton.style.display = 'none';
             
-            // ── STRATEGY 2: Parsing and mitigating "Chatty Behavior" ──
             try {
-                // Strip markdown codeblocks
-                const cleanText = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
-                
-                // Parse the JSON string into a JavaScript object
-                const parsedData = JSON.parse(cleanText);
+                // Parse the JSON string into a JavaScript object directly (no RegEx cleaning needed!)
+                const parsedData = JSON.parse(text);
 
                 // Build readable HTML out of the structured JSON data
                 let htmlReport = `
