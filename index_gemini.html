@@ -448,10 +448,13 @@
                     </div>
 
                     <div class="field">
-                        <label for="model-name">AI Model Name</label>
-                        <input type="text" id="model-name" value="local-model" placeholder="e.g., llama3, mistral, gpt-4">
-                        <p class="field-hint">Specify the exact model identifier for your server.</p>
-                    </div>                    
+                        <label for="model-name">AI Model Selection</label>
+                        <select id="model-name">
+                            <option value="local-model">Local Model</option>
+                            <option value="gemini-api">Gemini API</option>
+                        </select>
+                        <p class="field-hint">Select the environment you wish to route your request to.</p>
+                    </div>                 
                 </div>
 
                 <div class="divider"></div>
@@ -579,8 +582,7 @@
         const techStack   = document.getElementById('tech-stack').value.trim();
         const apiUrl      = document.getElementById('api-url').value.trim();
         const apiKey      = document.getElementById('api-key').value.trim();
-        const modelName   = document.getElementById('model-name').value.trim() || 'local-model';
-
+        const selectedApi = document.getElementById('model-name').value;
         const emptyState = document.getElementById('empty-state');
         const outputContent = document.getElementById('output-content');
         const skeleton   = document.getElementById('loading-skeleton');
@@ -613,7 +615,7 @@
         const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security architecture review: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
 
         // Determine API Dialect and Build Payload
-        const isGemini = apiUrl.includes("googleapis.com");
+        const isGemini = selectedApi === "gemini-api";        
         let finalUrl = apiUrl;
         let payload;
         let headers = { 'Content-Type': 'application/json' };
