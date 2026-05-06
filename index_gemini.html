@@ -446,6 +446,12 @@
                         <label for="api-key">Bearer Token <span style="color:var(--text-dim); font-weight:400">(optional)</span></label>
                         <input type="password" id="api-key" placeholder="sk-… or leave blank for local servers">
                     </div>
+
+                    <div class="field">
+                        <label for="model-name">AI Model Name</label>
+                        <input type="text" id="model-name" value="local-model" placeholder="e.g., llama3, mistral, gpt-4">
+                        <p class="field-hint">Specify the exact model identifier for your server.</p>
+                    </div>                    
                 </div>
 
                 <div class="divider"></div>
@@ -573,6 +579,7 @@
         const techStack   = document.getElementById('tech-stack').value.trim();
         const apiUrl      = document.getElementById('api-url').value.trim();
         const apiKey      = document.getElementById('api-key').value.trim();
+        const modelName   = document.getElementById('model-name').value.trim() || 'local-model';
 
         const emptyState = document.getElementById('empty-state');
         const outputContent = document.getElementById('output-content');
@@ -626,19 +633,17 @@
             required: ["project_overview", "compliance_target", "security_recommendations"]
         };
 
-        // 2. Native Gemini Payload
+        // 2. Payload
         const payload = {
-            systemInstruction: { parts: [{ text: systemPrompt }] },
-            contents: [{ parts: [{ text: userMessage }] }],
-            generationConfig: {
-                temperature: 0.2,
-                responseMimeType: "application/json",
-                responseSchema: securitySchema
-            }
+            model: modelName, 
+            messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user',   content: userMessage }
+            ],
+            temperature: 0.2,
+            max_tokens: 2000
         };
 
-        // Note: The key is pulled from your Bearer Token input box and appended to the URL
-        const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         try {
             const response = await fetch(geminiEndpoint, {
