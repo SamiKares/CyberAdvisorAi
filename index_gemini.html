@@ -433,6 +433,26 @@
             </div>
             <div class="panel-body">
 
+                <div class="config-section">
+                    <div class="config-label">Model Provider</div>
+                
+                    <div class="field">
+                        <label for="model-provider">Choose Provider</label>
+                        <select id="model-provider">
+                            <option value="local">Local Model (LM Studio / Ollama)</option>
+                            <option value="gemini">Google Gemini API</option>
+                        </select>
+                    </div>
+                
+                    <div class="field" id="gemini-model-field" style="display:none;">
+                        <label for="gemini-model">Gemini Model</label>
+                        <select id="gemini-model">
+                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- API config -->
                 <div class="config-section">
                     <div class="config-label">API Endpoint</div>
@@ -446,15 +466,6 @@
                         <label for="api-key">Bearer Token <span style="color:var(--text-dim); font-weight:400">(optional)</span></label>
                         <input type="password" id="api-key" placeholder="sk-… or leave blank for local servers">
                     </div>
-
-                    <div class="field">
-                        <label for="model-name">AI Model Selection</label>
-                        <select id="model-name">
-                            <option value="local-model">Local Model</option>
-                            <option value="gemini-api">Gemini API</option>
-                        </select>
-                        <p class="field-hint">Select the environment you wish to route your request to.</p>
-                    </div>                 
                 </div>
 
                 <div class="divider"></div>
@@ -540,6 +551,16 @@
     const statusDot   = document.getElementById('status-dot');
     const statusLabel = document.getElementById('status-label');
     const apiUrlInput = document.getElementById('api-url');
+    const providerSelect = document.getElementById('model-provider');
+    const geminiField = document.getElementById('gemini-model-field');
+
+    providerSelect.addEventListener('change', () => {
+        if (providerSelect.value === 'gemini') {
+            geminiField.style.display = 'block';
+        } else {
+            geminiField.style.display = 'none';
+        }
+    });
 
     function updateStatus(online) {
         if (online) {
@@ -582,7 +603,9 @@
         const techStack   = document.getElementById('tech-stack').value.trim();
         const apiUrl      = document.getElementById('api-url').value.trim();
         const apiKey      = document.getElementById('api-key').value.trim();
-        const selectedApi = document.getElementById('model-name').value;
+        const provider = document.getElementById('model-provider').value;
+        const geminiModel = document.getElementById('gemini-model')?.value;
+
         const emptyState = document.getElementById('empty-state');
         const outputContent = document.getElementById('output-content');
         const skeleton   = document.getElementById('loading-skeleton');
@@ -605,77 +628,93 @@
         spinner.style.display = 'block';
         generateBtn.disabled = true;
 
-        // Give the AI strict instructions on formatting
-        let systemPrompt = `You are a senior Cybersecurity Architect. You MUST output your response as a raw, valid JSON object following this exact schema: {"project_overview": "string", "compliance_target": "string", "security_recommendations": [{"category": "string", "severity": "Critical|High|Medium|Low", "finding": "string", "remediation": "string"}]}. Do not include any plain text outside the JSON.`;
-        
+        let systemPrompt = `You are a senior Cybersecurity Architect with 15+ years of experience. You must ONLY answer in valid JSON format. Do not include any plain text outside the JSON. Use the following exact JSON structure:
+{
+  "project_overview": "brief summary of the system",
+  "compliance_target": "target name",
+  "security_recommendations": [
+    {
+      "category": "e.g., Authentication, Network, Data Protection",
+      "severity": "Critical | High | Medium | Low",
+      "finding": "Short description of the risk",
+      "remediation": "Specific technical fix"
+    }
+  ]
+}`;
         if (compliance !== 'None') {
             systemPrompt += ` Strictly align all recommendations with ${compliance} compliance requirements.`;
         }
 
         const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security architecture review: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
 
-        // Determine API Dialect and Build Payload
-        const isGemini = selectedApi === "gemini-api";        
-        let finalUrl = apiUrl;
-        let payload;
-        let headers = { 'Content-Type': 'application/json' };
-
-        if (isGemini) {
-            // --- Gemini API Format ---
-            if (apiKey && !finalUrl.includes('key=')) {
-                finalUrl = `${finalUrl}?key=${apiKey}`;
-            }
-            payload = {
-                contents: [{
-                    parts: [{ text: systemPrompt + "\n\n" + userMessage }]
-                }],
-                generationConfig: {
-                    temperature: 0.2,
-                    maxOutputTokens: 2000,
-                    responseMimeType: "application/json" // Forces Gemini to return clean JSON
-                }
-            };
-        } else {
-            // --- OpenAI / Local Server Format ---
-            if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
-            payload = {
-                model: modelName, 
+        if (provider === 'local') {
+            const payload = {
+                model: 'local-model',
                 messages: [
                     { role: 'system', content: systemPrompt },
-                    { role: 'user',   content: userMessage }
+                    { role: 'user', content: userMessage }
                 ],
                 temperature: 0.2,
                 max_tokens: 2000
             };
-        }
-
-        try {
-            const response = await fetch(finalUrl, {
+        
+            const headers = { 'Content-Type': 'application/json' };
+            if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+        
+            const response = await fetch(apiUrl, {
                 method: 'POST',
-                headers: headers,
+                headers,
                 body: JSON.stringify(payload)
             });
-
-            if (!response.ok) {
-                const errText = await response.text();
-                throw new Error(`HTTP ${response.status}: ${errText}`);
-            }
-
+        
             const data = await response.json();
+            var text = data.choices[0].message.content;
+        }
             
-            // Extract text based on API response structure
-            let text = isGemini 
-                ? data.candidates[0].content.parts[0].text 
-                : data.choices[0].message.content;
-            
-            // Clean up Markdown backticks if the model ignores our formatting rules
-            text = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
-            
+        else if (provider === 'gemini') {
+
+            const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${apiKey}`;
+        
+            const geminiPayload = {
+                contents: [
+                    {
+                        parts: [
+                            { text: systemPrompt + "\n\n" + userMessage }
+                        ]
+                    }
+                ],
+                generationConfig: {
+                    temperature: 0.2,
+                    maxOutputTokens: 2000
+                }
+            };
+        
+            const response = await fetch(geminiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(geminiPayload)
+            });
+        
+            if (!response.ok) {
+                throw new Error(`Gemini API error: ${response.status}`);
+            }
+        
+            const data = await response.json();
+        
+            var text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        }
+
             skeleton.style.display = 'none';
             
+            // ── STRATEGY 2: Parsing and mitigating "Chatty Behavior" ──
             try {
+                // Strip markdown codeblocks
+                const cleanText = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
+                
                 // Parse the JSON string into a JavaScript object
-                const parsedData = JSON.parse(text);
+                const parsedData = JSON.parse(cleanText);
 
                 // Build readable HTML out of the structured JSON data
                 let htmlReport = `
@@ -693,6 +732,7 @@
                 if (parsedData.security_recommendations && Array.isArray(parsedData.security_recommendations)) {
                     parsedData.security_recommendations.forEach(rec => {
                         
+                        // Determine the badge color based on severity
                         let severityColor = 'var(--text-muted)';
                         const severityLower = rec.severity.toLowerCase();
                         if (severityLower.includes('critical')) severityColor = 'var(--danger)';
@@ -716,10 +756,12 @@
 
                 htmlReport += `</div>`; // Close md-output
 
+                // Inject the generated HTML into the page
                 outputContent.innerHTML = htmlReport;
                 copyBtn.style.display = 'inline-block';
 
             } catch (jsonError) {
+                // Failsafe for if the model ignored instructions and output plain text
                 outputContent.innerHTML = `
                     <div class="error-box">
                         <strong>⚠ JSON Decode Error:</strong> The model did not output valid JSON (Chatty Behavior detected).<br><br>
@@ -729,6 +771,7 @@
             }
 
             outputContent.style.display = 'block';
+            copyBtn.style.display = 'inline-block';
             updateStatus(true);
 
         } catch (err) {
