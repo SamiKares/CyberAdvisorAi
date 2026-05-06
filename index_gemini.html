@@ -634,33 +634,60 @@
         };
 
         // 2. Payload
-        const payload = {
-            model: modelName, 
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user',   content: userMessage }
-            ],
-            temperature: 0.2,
-            max_tokens: 2000
-        };
+        // 2. Determine API Dialect and Build Payload
+        const isGemini = apiUrl.includes("googleapis.com");
+        let finalUrl = apiUrl;
+        let payload;
+        let headers = { 'Content-Type': 'application/json' };
 
+        if (isGemini) {
+            // --- Gemini API Format ---
+            // If the user put the key in the Bearer Token field instead of the URL, append it
+            if (apiKey && !finalUrl.includes('key=')) {
+                finalUrl = `${finalUrl}?key=${apiKey}`;
+            }
+            payload = {
+                contents: [{
+                    parts: [{ text: systemPrompt + "\n\n" + userMessage }]
+                }],
+                generationConfig: {
+                    temperature: 0.2,
+                    maxOutputTokens: 2000,
+                    responseMimeType: "application/json" // Forces Gemini to return clean JSON
+                }
+            };
+        } else {
+            // --- OpenAI / Local Server Format ---
+            if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+            payload = {
+                model: modelName, 
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user',   content: userMessage }
+                ],
+                temperature: 0.2,
+                max_tokens: 2000
+            };
+        }
 
         try {
-            const response = await fetch(geminiEndpoint, {
+            const response = await fetch(finalUrl, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
-                if (response.status === 401) throw new Error('Authentication failed (401). Check your API key.');
-                throw new Error(`Server returned HTTP ${response.status}.`);
+                const errText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errText}`);
             }
 
             const data = await response.json();
             
-            // 3. Extract exact JSON string from Gemini's specific response structure
-            const text = data.candidates[0].content.parts[0].text;
+            // 3. Extract exact JSON string based on API response structure
+            const text = isGemini 
+                ? data.candidates[0].content.parts[0].text 
+                : data.choices[0].message.content;
             
             skeleton.style.display = 'none';
             
