@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberAdvisor AI — Security Architecture Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --bg:        #080c12;
+            --bg-panel:  #0d1320;
+            --bg-input:  #111827;
+            --border:    rgba(255,255,255,0.07);
+            --border-hi: rgba(99,179,237,0.35);
+            --accent:    #3b82f6;
+            --accent-hi: #60a5fa;
+            --accent-glow: rgba(59,130,246,0.18);
+            --text:      #e2e8f0;
+            --text-muted:#8b9ab0;
+            --text-dim:  #4a5568;
+            --success:   #10b981;
+            --warn:      #f59e0b;
+            --danger:    #ef4444;
+            --red-glow:  rgba(239,68,68,0.12);
+            --mono:      'JetBrains Mono', monospace;
+            --sans:      'DM Sans', sans-serif;
+            --display:   'Syne', sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 14px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Grid texture overlay ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Ambient glow ── */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -30vh; left: 50%;
+            transform: translateX(-50%);
+            width: 80vw; height: 60vh;
+            background: radial-gradient(ellipse, rgba(59,130,246,0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Layout ── */
+        .shell {
+            position: relative; z-index: 1;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 28px 60px;
+        }
+
+        /* ── Top bar ── */
+        .topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 56px;
+            animation: fadeDown 0.6s ease both;
+        }
+        .topbar-logo {
+            display: flex; align-items: center; gap: 10px;
+            font-family: var(--display); font-size: 15px; font-weight: 700;
+            letter-spacing: 0.04em; text-transform: uppercase; color: var(--text);
+        }
+        .topbar-logo .icon {
+            width: 30px; height: 30px;
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px;
+            box-shadow: 0 0 20px rgba(59,130,246,0.4);
+        }
+        .topbar-badge {
+            font-family: var(--mono); font-size: 10px; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--accent); background: var(--accent-glow);
+            border: 1px solid rgba(59,130,246,0.3);
+            padding: 3px 10px; border-radius: 3px;
+        }
+        .topbar-right {
+            display: flex; align-items: center; gap: 20px;
+        }
+        .status-dot {
+            display: flex; align-items: center; gap: 7px;
+            font-family: var(--mono); font-size: 11px; color: var(--text-muted);
+        }
+        .dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--text-dim);
+        }
+        .dot.online { background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse-dot 2s infinite; }
+        @keyframes pulse-dot {
+            0%,100% { opacity:1; } 50% { opacity:.4; }
+        }
+
+        /* ── Hero ── */
+        .hero {
+            margin-bottom: 52px;
+            animation: fadeUp 0.7s ease 0.1s both;
+        }
+        .hero-eyebrow {
+            font-family: var(--mono); font-size: 11px; font-weight: 500;
+            letter-spacing: 0.16em; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 18px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .hero-eyebrow::before {
+            content: '';
+            display: block; width: 28px; height: 1px; background: var(--accent);
+        }
+        .hero h1 {
+            font-family: var(--display); font-size: clamp(30px, 4vw, 46px);
+            font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
+            color: #fff; margin-bottom: 16px;
+        }
+        .hero h1 span {
+            background: linear-gradient(90deg, var(--accent-hi), #a78bfa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 15px; font-weight: 300; color: var(--text-muted);
+            max-width: 520px; line-height: 1.7;
+        }
+
+        /* ── Two-column grid ── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            animation: fadeUp 0.7s ease 0.2s both;
+        }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        /* ── Panels ── */
+        .panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .panel::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.5;
+        }
+        .panel-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .panel-num {
+            font-family: var(--mono); font-size: 11px; font-weight: 600;
+            color: var(--accent); opacity: 0.7;
+        }
+        .panel-title {
+            font-family: var(--display); font-size: 13px; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase; color: var(--text);
+        }
+        .panel-body { padding: 24px; }
+
+        /* ── Config section ── */
+        .config-section {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .config-label {
+            font-family: var(--mono); font-size: 10px; font-weight: 600;
+            letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .config-label::after {
+            content: ''; flex: 1; height: 1px; background: var(--border);
+        }
+
+        /* ── Form fields ── */
+        .field { margin-bottom: 16px; }
+        .field:last-child { margin-bottom: 0; }
+        label {
+            display: block; margin-bottom: 6px;
+            font-size: 12px; font-weight: 500; color: var(--text-muted);
+            letter-spacing: 0.02em;
+        }
+        input[type="text"], input[type="password"], select, textarea {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: var(--sans); font-size: 13px;
+            padding: 9px 12px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+        }
+        input[type="text"]:focus, input[type="password"]:focus,
+        select:focus, textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        input::placeholder, textarea::placeholder { color: var(--text-dim); }
+        select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b9ab0' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+        select option { background: #1a2335; }
+        textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+        .field-hint { margin-top: 5px; font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+        /* ── Primary button ── */
+        .btn-primary {
+            width: 100%; padding: 13px 20px;
+            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+            border: none; border-radius: 8px;
+            color: #fff; font-family: var(--display);
+            font-size: 13px; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+            box-shadow: 0 4px 24px rgba(59,130,246,0.3);
+            position: relative; overflow: hidden;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(rgba(255,255,255,0.08), transparent);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 32px rgba(59,130,246,0.45);
+        }
+        .btn-primary:active:not(:disabled) { transform: translateY(0); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Spinner ── */
+        .spinner {
+            width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Output panel ── */
+        .output-panel { display: flex; flex-direction: column; }
+        .output-topbar {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .output-meta {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .output-scroll {
+            flex: 1; overflow-y: auto; padding: 24px;
+            min-height: 420px; max-height: 680px;
+        }
+        .output-scroll::-webkit-scrollbar { width: 5px; }
+        .output-scroll::-webkit-scrollbar-track { background: transparent; }
+        .output-scroll::-webkit-scrollbar-thumb { background: rgba(99,179,237,0.2); border-radius: 3px; }
+
+        /* ── Empty state ── */
+        .empty-state {
+            height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 40px 20px;
+            gap: 12px;
+        }
+        .empty-icon {
+            width: 52px; height: 52px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            color: var(--text-dim);
+            background: rgba(255,255,255,0.02);
+            margin-bottom: 4px;
+        }
+        .empty-state h3 {
+            font-family: var(--display); font-size: 14px; font-weight: 700;
+            color: var(--text-muted); letter-spacing: 0.04em;
+        }
+        .empty-state p { font-size: 12px; color: var(--text-dim); max-width: 220px; line-height: 1.7; }
+
+        /* ── Markdown output ── */
+        .md-output h1, .md-output h2, .md-output h3 {
+            font-family: var(--display); font-weight: 700;
+            color: var(--text); letter-spacing: -0.01em;
+        }
+        .md-output h1 { font-size: 18px; margin: 24px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .md-output h2 { font-size: 15px; margin: 20px 0 8px; color: var(--accent-hi); }
+        .md-output h3 { font-size: 13px; margin: 16px 0 6px; color: var(--text-muted); }
+        .md-output p { color: var(--text-muted); line-height: 1.75; margin-bottom: 12px; font-size: 13px; }
+        .md-output ul, .md-output ol { margin: 0 0 14px 18px; }
+        .md-output li { color: var(--text-muted); line-height: 1.7; margin-bottom: 5px; font-size: 13px; }
+        .md-output li::marker { color: var(--accent); }
+        .md-output strong { color: var(--text); font-weight: 600; }
+        .md-output code {
+            font-family: var(--mono); font-size: 12px;
+            background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
+            padding: 1px 6px; border-radius: 4px; color: var(--accent-hi);
+        }
+        .md-output pre { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; overflow-x: auto; margin-bottom: 14px; }
+        .md-output pre code { background: none; border: none; padding: 0; color: var(--text-muted); }
+
+        /* ── Copy button ── */
+        .btn-copy {
+            font-family: var(--mono); font-size: 10px; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-muted); background: transparent;
+            border: 1px solid var(--border); border-radius: 5px;
+            padding: 5px 12px; cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .btn-copy:hover { color: var(--accent-hi); border-color: var(--border-hi); }
+
+        /* ── Error state ── */
+        .error-box {
+            background: var(--red-glow); border: 1px solid rgba(239,68,68,0.25);
+            border-radius: 8px; padding: 16px; color: #fca5a5;
+            font-size: 13px; line-height: 1.7;
+        }
+        .error-box strong { color: var(--danger); }
+        .error-box ul { margin: 8px 0 0 18px; }
+        .error-box li { margin-bottom: 4px; }
+
+        /* ── Loading lines animation ── */
+        .loading-line {
+            height: 12px; border-radius: 6px;
+            background: linear-gradient(90deg, var(--bg-input) 25%, rgba(59,130,246,0.08) 50%, var(--bg-input) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            margin-bottom: 10px;
+        }
+        .loading-line.w-3-4 { width: 75%; }
+        .loading-line.w-half { width: 50%; }
+        .loading-line.w-full { width: 100%; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* ── Footer ── */
+        footer {
+            position: relative; z-index: 1;
+            border-top: 1px solid var(--border);
+            padding: 22px 28px;
+            max-width: 1180px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 10px;
+        }
+        .footer-left {
+            font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+            letter-spacing: 0.06em;
+        }
+        .footer-right {
+            font-size: 11px; color: var(--text-dim);
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes fadeDown { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
+
+        /* ── Divider ── */
+        .divider { height: 1px; background: var(--border); margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+<div class="shell">
+
+    <!-- Top bar -->
+    <nav class="topbar">
+        <div class="topbar-logo">
+            <div class="icon">🔐</div>
+            CyberAdvisor
+            <span class="topbar-badge">AI Platform</span>
+        </div>
+        <div class="topbar-right">
+            <div class="status-dot">
+                <span class="dot online" id="status-dot"></span>
+                <span id="status-label">Offline</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-eyebrow">Security Architecture Intelligence</div>
+        <h1>Intelligent Threat Modeling<br>for <span>Modern Systems</span></h1>
+        <p>Describe your architecture. Get a comprehensive, prioritized security blueprint — tailored to your stack, compliant with your regulatory requirements.</p>
+    </section>
+
+    <!-- Main grid -->
+    <div class="grid-2">
+
+        <!-- Left: config panel -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-num">01</span>
+                <span class="panel-title">System Configuration</span>
+            </div>
+            <div class="panel-body">
+
+                <!-- API config -->
+                <div class="config-section">
+                    <div class="config-label">API Endpoint</div>
+                    <div class="field">
+                        <label for="api-url">Server URL</label>
+                        <input type="text" id="api-url" value="http://localhost:1234/v1/chat/completions"
+                            placeholder="http://localhost:1234/v1/chat/completions">
+                        <p class="field-hint">LM Studio default. Use port 11434 for Ollama.</p>
+                    </div>
+                    <div class="field">
+                        <label for="api-key">Bearer Token <span style="color:var(--text-dim); font-weight:400">(optional)</span></label>
+                        <input type="password" id="api-key" placeholder="sk-… or leave blank for local servers">
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Project config -->
+                <div class="field">
+                    <label for="project-type">Project Type</label>
+                    <select id="project-type">
+                        <option value="Web Application">Web Application</option>
+                        <option value="Mobile App">Mobile App</option>
+                        <option value="Cloud Infrastructure">Cloud Infrastructure</option>
+                        <option value="Internal Network">Internal Network</option>
+                        <option value="IoT System">IoT System</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="compliance">Compliance Target</label>
+                    <select id="compliance">
+                        <option value="None">Standard Best Practices</option>
+                        <option value="GDPR">GDPR — European Data Privacy</option>
+                        <option value="HIPAA">HIPAA — Healthcare Data</option>
+                        <option value="PCI-DSS">PCI-DSS — Payment Card Industry</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="tech-stack">Tech Stack &amp; Architecture</label>
+                    <textarea id="tech-stack" rows="5"
+                        placeholder="e.g. React + TypeScript frontend, FastAPI backend on AWS Lambda, PostgreSQL RDS, Redis cache, NGINX reverse proxy…"></textarea>
+                </div>
+
+                <button class="btn-primary" id="generate-btn">
+                    <span>Generate Security Report</span>
+                    <div class="spinner" id="btn-spinner"></div>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Right: output panel -->
+        <div class="panel output-panel">
+            <div class="output-topbar">
+                <div class="output-meta">
+                    <span class="panel-num">02</span>
+                    <span class="panel-title">Security Recommendations</span>
+                </div>
+                <button class="btn-copy" id="copy-btn" style="display:none">Copy Report</button>
+            </div>
+
+            <div class="output-scroll" id="output-scroll">
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-icon">🛡</div>
+                    <h3>Awaiting Analysis</h3>
+                    <p>Configure your system on the left and run the analysis to see results here.</p>
+                </div>
+                <div class="md-output" id="output-content" style="display:none"></div>
+                <div id="loading-skeleton" style="display:none; padding: 4px 0;">
+                    <div class="loading-line w-3-4"></div>
+                    <div class="loading-line w-full"></div>
+                    <div class="loading-line w-half"></div>
+                    <div class="loading-line w-full" style="margin-top:20px"></div>
+                    <div class="loading-line w-3-4"></div>
+                    <div class="loading-line w-full"></div>
+                    <div class="loading-line w-half"></div>
+                    <div class="loading-line w-3-4" style="margin-top:20px"></div>
+                    <div class="loading-line w-full"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-left">© 2026 Erno Niiranen · Senja Vuoristo · Sami Karesniemi</div>
+    <div class="footer-right">CyberAdvisor AI — Security Architecture Platform</div>
+</footer>
+
+<script>
+    // ── Status dot reflects API URL field ──
+    const statusDot   = document.getElementById('status-dot');
+    const statusLabel = document.getElementById('status-label');
+    const apiUrlInput = document.getElementById('api-url');
+
+    function updateStatus(online) {
+        if (online) {
+            statusDot.classList.add('online');
+            statusLabel.textContent = 'Connected';
+        } else {
+            statusDot.classList.remove('online');
+            statusLabel.textContent = 'Offline';
+        }
+    }
+
+    // Ping the base URL to check connectivity
+    async function pingServer() {
+        const raw = apiUrlInput.value.trim();
+        if (!raw) { updateStatus(false); return; }
+        try {
+            const base = new URL(raw).origin;
+            const res = await fetch(base + '/v1/models', { method: 'GET', signal: AbortSignal.timeout(2000) });
+            updateStatus(res.ok || res.status === 404); // 404 still means server is up
+        } catch { updateStatus(false); }
+    }
+    apiUrlInput.addEventListener('change', pingServer);
+    pingServer();
+
+    // ── Copy report ──
+    document.getElementById('copy-btn').addEventListener('click', () => {
+        const text = document.getElementById('output-content').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById('copy-btn');
+            const orig = btn.textContent;
+            btn.textContent = '✓ Copied';
+            setTimeout(() => btn.textContent = orig, 2000);
+        });
+    });
+
+    // ── Generate ──
+    document.getElementById('generate-btn').addEventListener('click', async () => {
+        const projectType = document.getElementById('project-type').value;
+        const compliance  = document.getElementById('compliance').value;
+        const techStack   = document.getElementById('tech-stack').value.trim();
+        const apiUrl      = document.getElementById('api-url').value.trim();
+        const apiKey      = document.getElementById('api-key').value.trim();
+
+        const emptyState = document.getElementById('empty-state');
+        const outputContent = document.getElementById('output-content');
+        const skeleton   = document.getElementById('loading-skeleton');
+        const spinner    = document.getElementById('btn-spinner');
+        const generateBtn = document.getElementById('generate-btn');
+        const copyBtn    = document.getElementById('copy-btn');
+
+        if (!techStack) {
+            document.getElementById('tech-stack').focus();
+            document.getElementById('tech-stack').style.borderColor = 'var(--danger)';
+            setTimeout(() => document.getElementById('tech-stack').style.borderColor = '', 2000);
+            return;
+        }
+
+        // Loading state
+        emptyState.style.display = 'none';
+        outputContent.style.display = 'none';
+        skeleton.style.display = 'block';
+        copyBtn.style.display = 'none';
+        spinner.style.display = 'block';
+        generateBtn.disabled = true;
+
+        let systemPrompt = `You are a senior Cybersecurity Architect with 15+ years of experience. You must ONLY answer in valid JSON format. Do not include any plain text outside the JSON. Use the following exact JSON structure:
+{
+  "project_overview": "brief summary of the system",
+  "compliance_target": "target name",
+  "security_recommendations": [
+    {
+      "category": "e.g., Authentication, Network, Data Protection",
+      "severity": "Critical | High | Medium | Low",
+      "finding": "Short description of the risk",
+      "remediation": "Specific technical fix"
+    }
+  ]
+}`;
+        if (compliance !== 'None') {
+            systemPrompt += ` Strictly align all recommendations with ${compliance} compliance requirements.`;
+        }
+
+        const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security architecture review: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
+
+        const payload = {
+            model: 'gemini-2.5-flash',
+            messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user',   content: userMessage }
+            ],
+            temperature: 0.2,
+            max_tokens: 2000
+        };
+
+        const headers = { 'Content-Type': 'application/json' };
+        if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) throw new Error('Authentication failed (401). Check your API key.');
+                throw new Error(`Server returned HTTP ${response.status}.`);
+            }
+
+            const data = await response.json();
+            const text = data.choices[0].message.content;
+
+            skeleton.style.display = 'none';
+            
+            // ── STRATEGY 2: Parsing and mitigating "Chatty Behavior" ──
+            try {
+                // Strip markdown codeblocks
+                const cleanText = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
+                
+                // Parse the JSON string into a JavaScript object
+                const parsedData = JSON.parse(cleanText);
+
+                // Build readable HTML out of the structured JSON data
+                let htmlReport = `
+                    <div class="md-output">
+                        <h2 style="margin-top: 0;">Project Overview</h2>
+                        <p>${parsedData.project_overview}</p>
+
+                        <h2>Compliance Target</h2>
+                        <p style="color: var(--text);">${parsedData.compliance_target}</p>
+
+                        <h2>Security Recommendations</h2>
+                `;
+
+                // Loop through the array of recommendations and build a card for each
+                if (parsedData.security_recommendations && Array.isArray(parsedData.security_recommendations)) {
+                    parsedData.security_recommendations.forEach(rec => {
+                        
+                        // Determine the badge color based on severity
+                        let severityColor = 'var(--text-muted)';
+                        const severityLower = rec.severity.toLowerCase();
+                        if (severityLower.includes('critical')) severityColor = 'var(--danger)';
+                        else if (severityLower.includes('high')) severityColor = 'var(--warn)';
+                        else if (severityLower.includes('medium')) severityColor = 'var(--accent)';
+
+                        htmlReport += `
+                            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
+                                    <h3 style="margin: 0; color: var(--text); font-size: 14px;">${rec.category}</h3>
+                                    <span style="font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: ${severityColor}; background: rgba(255,255,255,0.03); border: 1px solid ${severityColor}; border-radius: 4px; padding: 3px 8px;">
+                                        ${rec.severity}
+                                    </span>
+                                </div>
+                                <p style="margin-bottom: 8px;"><strong>Finding:</strong> <span style="color: var(--text);">${rec.finding}</span></p>
+                                <p style="margin: 0;"><strong>Remediation:</strong> ${rec.remediation}</p>
+                            </div>
+                        `;
+                    });
+                }
+
+                htmlReport += `</div>`; // Close md-output
+
+                // Inject the generated HTML into the page
+                outputContent.innerHTML = htmlReport;
+                copyBtn.style.display = 'inline-block';
+
+            } catch (jsonError) {
+                // Failsafe for if the model ignored instructions and output plain text
+                outputContent.innerHTML = `
+                    <div class="error-box">
+                        <strong>⚠ JSON Decode Error:</strong> The model did not output valid JSON (Chatty Behavior detected).<br><br>
+                        <strong>Raw Output:</strong><br>
+                        <pre style="margin-top: 10px; white-space: pre-wrap; font-family: var(--mono); font-size: 11px;">${text}</pre>
+                    </div>`;
+            }
+
+            outputContent.style.display = 'block';
+            copyBtn.style.display = 'inline-block';
+            updateStatus(true);
+
+        } catch (err) {
+            console.error(err);
+            skeleton.style.display = 'none';
+            outputContent.innerHTML = `
+                <div class="error-box">
+                    <strong>⚠ Connection Error:</strong> ${err.message}
+                    <ul>
+                        <li>Is your local LLM server running? (LM Studio, Ollama, etc.)</li>
+                        <li>Check CORS settings on your inference server.</li>
+                        <li>If this page is hosted over HTTPS, the browser will block HTTP localhost requests — run it locally.</li>
+                        <li>Verify the endpoint URL is correct and the model is loaded.</li>
+                    </ul>
+                </div>`;
+            outputContent.style.display = 'block';
+            updateStatus(false);
+        } finally {
+            spinner.style.display = 'none';
+            generateBtn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
