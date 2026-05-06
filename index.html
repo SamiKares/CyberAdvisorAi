@@ -32,9 +32,7 @@
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         html { scroll-behavior: smooth; }
-
         body {
             background: var(--bg);
             color: var(--text);
@@ -43,8 +41,6 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
-        /* ── Grid texture overlay ── */
         body::before {
             content: '';
             position: fixed; inset: 0;
@@ -52,11 +48,8 @@
                 linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
             background-size: 48px 48px;
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; z-index: 0;
         }
-
-        /* ── Ambient glow ── */
         body::after {
             content: '';
             position: fixed;
@@ -64,11 +57,9 @@
             transform: translateX(-50%);
             width: 80vw; height: 60vh;
             background: radial-gradient(ellipse, rgba(59,130,246,0.06) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; z-index: 0;
         }
 
-        /* ── Layout ── */
         .shell {
             position: relative; z-index: 1;
             max-width: 1180px;
@@ -104,21 +95,14 @@
             border: 1px solid rgba(59,130,246,0.3);
             padding: 3px 10px; border-radius: 3px;
         }
-        .topbar-right {
-            display: flex; align-items: center; gap: 20px;
-        }
+        .topbar-right { display: flex; align-items: center; gap: 20px; }
         .status-dot {
             display: flex; align-items: center; gap: 7px;
             font-family: var(--mono); font-size: 11px; color: var(--text-muted);
         }
-        .dot {
-            width: 6px; height: 6px; border-radius: 50%;
-            background: var(--text-dim);
-        }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-dim); }
         .dot.online { background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse-dot 2s infinite; }
-        @keyframes pulse-dot {
-            0%,100% { opacity:1; } 50% { opacity:.4; }
-        }
+        @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:.4; } }
 
         /* ── Hero ── */
         .hero {
@@ -131,10 +115,7 @@
             color: var(--accent); margin-bottom: 18px;
             display: flex; align-items: center; gap: 10px;
         }
-        .hero-eyebrow::before {
-            content: '';
-            display: block; width: 28px; height: 1px; background: var(--accent);
-        }
+        .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--accent); }
         .hero h1 {
             font-family: var(--display); font-size: clamp(30px, 4vw, 46px);
             font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
@@ -144,12 +125,9 @@
             background: linear-gradient(90deg, var(--accent-hi), #a78bfa);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .hero p {
-            font-size: 15px; font-weight: 300; color: var(--text-muted);
-            max-width: 520px; line-height: 1.7;
-        }
+        .hero p { font-size: 15px; font-weight: 300; color: var(--text-muted); max-width: 520px; line-height: 1.7; }
 
-        /* ── Two-column grid ── */
+        /* ── Grid ── */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -177,14 +155,8 @@
             border-bottom: 1px solid var(--border);
             display: flex; align-items: center; gap: 10px;
         }
-        .panel-num {
-            font-family: var(--mono); font-size: 11px; font-weight: 600;
-            color: var(--accent); opacity: 0.7;
-        }
-        .panel-title {
-            font-family: var(--display); font-size: 13px; font-weight: 700;
-            letter-spacing: 0.06em; text-transform: uppercase; color: var(--text);
-        }
+        .panel-num { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--accent); opacity: 0.7; }
+        .panel-title { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text); }
         .panel-body { padding: 24px; }
 
         /* ── Config section ── */
@@ -201,17 +173,83 @@
             color: var(--text-muted); margin-bottom: 12px;
             display: flex; align-items: center; gap: 8px;
         }
-        .config-label::after {
-            content: ''; flex: 1; height: 1px; background: var(--border);
-        }
+        .config-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-        /* ── Form fields ── */
+        /* ── Provider badge strip ── */
+        .provider-strip {
+            display: flex; gap: 6px; flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+        .provider-pill {
+            display: flex; align-items: center; gap: 5px;
+            font-family: var(--mono); font-size: 10px; font-weight: 600;
+            letter-spacing: 0.08em;
+            padding: 5px 10px; border-radius: 4px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .provider-pill:hover { border-color: var(--accent); color: var(--accent-hi); }
+        .provider-pill.active {
+            border-color: var(--accent);
+            background: var(--accent-glow);
+            color: var(--accent-hi);
+        }
+        .provider-pill .pill-icon { font-size: 12px; }
+
+        /* ── Provider info box ── */
+        .provider-info {
+            background: rgba(59,130,246,0.05);
+            border: 1px solid rgba(59,130,246,0.15);
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            display: none;
+        }
+        .provider-info.visible { display: block; }
+        .provider-info a {
+            color: var(--accent-hi);
+            text-decoration: none;
+        }
+        .provider-info a:hover { text-decoration: underline; }
+        .provider-info strong { color: var(--text); }
+
+        /* ── Auth row — key field + visibility toggle ── */
+        .auth-row {
+            display: flex; gap: 8px; align-items: flex-end;
+        }
+        .auth-row .field { flex: 1; margin-bottom: 0; }
+        .btn-eye {
+            height: 36px; width: 36px; flex-shrink: 0;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-size: 15px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: border-color 0.2s, color 0.2s;
+            margin-bottom: 0;
+        }
+        .btn-eye:hover { border-color: var(--accent); color: var(--accent-hi); }
+
+        /* ── Fields ── */
         .field { margin-bottom: 16px; }
         .field:last-child { margin-bottom: 0; }
         label {
             display: block; margin-bottom: 6px;
             font-size: 12px; font-weight: 500; color: var(--text-muted);
             letter-spacing: 0.02em;
+        }
+        label .lbl-hint {
+            font-size: 10px; font-weight: 400;
+            color: var(--text-dim); margin-left: 6px;
         }
         input[type="text"], input[type="password"], select, textarea {
             width: 100%;
@@ -231,7 +269,11 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
         input::placeholder, textarea::placeholder { color: var(--text-dim); }
-        select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b9ab0' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+        select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b9ab0' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;
+        }
         select option { background: #1a2335; }
         textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
         .field-hint { margin-top: 5px; font-size: 11px; color: var(--text-dim); line-height: 1.5; }
@@ -255,35 +297,28 @@
             position: absolute; inset: 0;
             background: linear-gradient(rgba(255,255,255,0.08), transparent);
         }
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 32px rgba(59,130,246,0.45);
-        }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 32px rgba(59,130,246,0.45); }
         .btn-primary:active:not(:disabled) { transform: translateY(0); }
         .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* ── Spinner ── */
         .spinner {
             width: 16px; height: 16px;
             border: 2px solid rgba(255,255,255,0.3);
             border-top-color: #fff;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            display: none;
-            flex-shrink: 0;
+            display: none; flex-shrink: 0;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ── Output panel ── */
+        /* ── Output ── */
         .output-panel { display: flex; flex-direction: column; }
         .output-topbar {
             padding: 18px 24px;
             border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
         }
-        .output-meta {
-            display: flex; align-items: center; gap: 8px;
-        }
+        .output-meta { display: flex; align-items: center; gap: 8px; }
         .output-scroll {
             flex: 1; overflow-y: auto; padding: 24px;
             min-height: 420px; max-height: 680px;
@@ -292,35 +327,23 @@
         .output-scroll::-webkit-scrollbar-track { background: transparent; }
         .output-scroll::-webkit-scrollbar-thumb { background: rgba(99,179,237,0.2); border-radius: 3px; }
 
-        /* ── Empty state ── */
         .empty-state {
             height: 100%;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            text-align: center; padding: 40px 20px;
-            gap: 12px;
+            text-align: center; padding: 40px 20px; gap: 12px;
         }
         .empty-icon {
             width: 52px; height: 52px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            border: 1px solid var(--border); border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 22px;
-            color: var(--text-dim);
-            background: rgba(255,255,255,0.02);
-            margin-bottom: 4px;
+            font-size: 22px; color: var(--text-dim);
+            background: rgba(255,255,255,0.02); margin-bottom: 4px;
         }
-        .empty-state h3 {
-            font-family: var(--display); font-size: 14px; font-weight: 700;
-            color: var(--text-muted); letter-spacing: 0.04em;
-        }
+        .empty-state h3 { font-family: var(--display); font-size: 14px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.04em; }
         .empty-state p { font-size: 12px; color: var(--text-dim); max-width: 220px; line-height: 1.7; }
 
-        /* ── Markdown output ── */
-        .md-output h1, .md-output h2, .md-output h3 {
-            font-family: var(--display); font-weight: 700;
-            color: var(--text); letter-spacing: -0.01em;
-        }
+        .md-output h1, .md-output h2, .md-output h3 { font-family: var(--display); font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
         .md-output h1 { font-size: 18px; margin: 24px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
         .md-output h2 { font-size: 15px; margin: 20px 0 8px; color: var(--accent-hi); }
         .md-output h3 { font-size: 13px; margin: 16px 0 6px; color: var(--text-muted); }
@@ -329,15 +352,10 @@
         .md-output li { color: var(--text-muted); line-height: 1.7; margin-bottom: 5px; font-size: 13px; }
         .md-output li::marker { color: var(--accent); }
         .md-output strong { color: var(--text); font-weight: 600; }
-        .md-output code {
-            font-family: var(--mono); font-size: 12px;
-            background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
-            padding: 1px 6px; border-radius: 4px; color: var(--accent-hi);
-        }
+        .md-output code { font-family: var(--mono); font-size: 12px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); padding: 1px 6px; border-radius: 4px; color: var(--accent-hi); }
         .md-output pre { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; overflow-x: auto; margin-bottom: 14px; }
         .md-output pre code { background: none; border: none; padding: 0; color: var(--text-muted); }
 
-        /* ── Copy button ── */
         .btn-copy {
             font-family: var(--mono); font-size: 10px; font-weight: 600;
             letter-spacing: 0.1em; text-transform: uppercase;
@@ -348,7 +366,6 @@
         }
         .btn-copy:hover { color: var(--accent-hi); border-color: var(--border-hi); }
 
-        /* ── Error state ── */
         .error-box {
             background: var(--red-glow); border: 1px solid rgba(239,68,68,0.25);
             border-radius: 8px; padding: 16px; color: #fca5a5;
@@ -358,20 +375,17 @@
         .error-box ul { margin: 8px 0 0 18px; }
         .error-box li { margin-bottom: 4px; }
 
-        /* ── Loading lines animation ── */
         .loading-line {
             height: 12px; border-radius: 6px;
             background: linear-gradient(90deg, var(--bg-input) 25%, rgba(59,130,246,0.08) 50%, var(--bg-input) 75%);
             background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            margin-bottom: 10px;
+            animation: shimmer 1.5s infinite; margin-bottom: 10px;
         }
         .loading-line.w-3-4 { width: 75%; }
         .loading-line.w-half { width: 50%; }
         .loading-line.w-full { width: 100%; }
         @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* ── Footer ── */
         footer {
             position: relative; z-index: 1;
             border-top: 1px solid var(--border);
@@ -380,19 +394,11 @@
             display: flex; align-items: center; justify-content: space-between;
             flex-wrap: wrap; gap: 10px;
         }
-        .footer-left {
-            font-family: var(--mono); font-size: 11px; color: var(--text-dim);
-            letter-spacing: 0.06em;
-        }
-        .footer-right {
-            font-size: 11px; color: var(--text-dim);
-        }
+        .footer-left { font-family: var(--mono); font-size: 11px; color: var(--text-dim); letter-spacing: 0.06em; }
+        .footer-right { font-size: 11px; color: var(--text-dim); }
 
-        /* ── Animations ── */
         @keyframes fadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
         @keyframes fadeDown { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
-
-        /* ── Divider ── */
         .divider { height: 1px; background: var(--border); margin: 20px 0; }
     </style>
 </head>
@@ -400,7 +406,6 @@
 
 <div class="shell">
 
-    <!-- Top bar -->
     <nav class="topbar">
         <div class="topbar-logo">
             <div class="icon">🔐</div>
@@ -409,23 +414,21 @@
         </div>
         <div class="topbar-right">
             <div class="status-dot">
-                <span class="dot online" id="status-dot"></span>
+                <span class="dot" id="status-dot"></span>
                 <span id="status-label">Offline</span>
             </div>
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
         <div class="hero-eyebrow">Security Architecture Intelligence</div>
         <h1>Intelligent Threat Modeling<br>for <span>Modern Systems</span></h1>
         <p>Describe your architecture. Get a comprehensive, prioritized security blueprint — tailored to your stack, compliant with your regulatory requirements.</p>
     </section>
 
-    <!-- Main grid -->
     <div class="grid-2">
 
-        <!-- Left: config panel -->
+        <!-- Left: config -->
         <div class="panel">
             <div class="panel-header">
                 <span class="panel-num">01</span>
@@ -433,35 +436,63 @@
             </div>
             <div class="panel-body">
 
-                <!-- API config -->
                 <div class="config-section">
-                    <div class="config-label">API Endpoint</div>
-                    <div class="field">
-                        <label for="api-url">Server URL</label>
-                        <input type="text" id="api-url" value="http://localhost:1234/v1/chat/completions"
-                            placeholder="http://localhost:1234/v1/chat/completions">
-                        <p class="field-hint">LM Studio default. Use port 11434 for Ollama.</p>
+                    <div class="config-label">API Provider</div>
+
+                    <!-- Provider pills -->
+                    <div class="provider-strip" id="provider-strip">
+                        <div class="provider-pill active" data-provider="local">
+                            <span class="pill-icon">🖥</span> Local
+                        </div>
+                        <div class="provider-pill" data-provider="groq">
+                            <span class="pill-icon">⚡</span> Groq
+                        </div>
+                        <div class="provider-pill" data-provider="gemini">
+                            <span class="pill-icon">✦</span> Gemini
+                        </div>
+                        <div class="provider-pill" data-provider="openai">
+                            <span class="pill-icon">◎</span> OpenAI
+                        </div>
+                        <div class="provider-pill" data-provider="openrouter">
+                            <span class="pill-icon">⇄</span> OpenRouter
+                        </div>
+                        <div class="provider-pill" data-provider="custom">
+                            <span class="pill-icon">⚙</span> Custom
+                        </div>
                     </div>
-                    
-                    <div class="field">
-                        <label for="api-key">Bearer Token <span style="color:var(--text-dim); font-weight:400">(optional)</span></label>
-                        <input type="password" id="api-key" placeholder="sk-… or leave blank for local servers">
+
+                    <!-- Provider info box -->
+                    <div class="provider-info" id="provider-info"></div>
+
+                    <!-- Endpoint URL — hidden for managed providers, shown for local/custom -->
+                    <div class="field" id="field-url">
+                        <label for="api-url">Endpoint URL</label>
+                        <input type="text" id="api-url" placeholder="http://localhost:1234/v1/chat/completions">
+                        <p class="field-hint" id="url-hint">LM Studio default. Ollama uses port 11434.</p>
                     </div>
-                    
+
+                    <!-- Model select — dynamic per provider -->
                     <div class="field">
-                        <label for="model-select">Model Selection</label>
-                        <select id="model-select">
-                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
-                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
-                            <option value="local-model">Local Model</option>
-                        </select>
+                        <label for="model-select">Model</label>
+                        <select id="model-select"></select>
+                    </div>
+
+                    <!-- API key — label/placeholder change per provider -->
+                    <div class="field" id="field-key">
+                        <label for="api-key" id="key-label">Bearer Token <span class="lbl-hint">(optional for local)</span></label>
+                        <div class="auth-row">
+                            <div class="field">
+                                <input type="password" id="api-key" placeholder="Leave blank for local servers">
+                            </div>
+                            <button class="btn-eye" id="btn-eye" title="Toggle visibility">👁</button>
+                        </div>
+                        <p class="field-hint" id="key-hint">Used only for authentication — never stored or sent anywhere except the selected API endpoint.</p>
                     </div>
 
                 </div>
 
                 <div class="divider"></div>
 
-                <!-- Project config -->
                 <div class="field">
                     <label for="project-type">Project Type</label>
                     <select id="project-type">
@@ -497,7 +528,7 @@
             </div>
         </div>
 
-        <!-- Right: output panel -->
+        <!-- Right: output -->
         <div class="panel output-panel">
             <div class="output-topbar">
                 <div class="output-meta">
@@ -531,84 +562,302 @@
     </div>
 </div>
 
-<!-- Footer -->
 <footer>
     <div class="footer-left">© 2026 Erno Niiranen · Senja Vuoristo · Sami Karesniemi</div>
     <div class="footer-right">CyberAdvisor AI — Security Architecture Platform</div>
 </footer>
 
 <script>
-    // ── Status dot reflects API URL field ──
-    const statusDot   = document.getElementById('status-dot');
-    const statusLabel = document.getElementById('status-label');
-    const apiUrlInput = document.getElementById('api-url');
+// ── Provider definitions ──────────────────────────────────────────────────────
+const PROVIDERS = {
+    local: {
+        label: 'Local Server',
+        showUrl: true,
+        defaultUrl: 'http://localhost:1234/v1/chat/completions',
+        urlHint: 'LM Studio default (port 1234). Ollama uses port 11434 with /api/chat.',
+        keyRequired: false,
+        keyLabel: 'Bearer Token',
+        keyHint: 'Leave blank — local servers typically don\'t require authentication.',
+        keyPlaceholder: 'Leave blank for local servers',
+        models: [
+            { value: 'local-model', label: 'Loaded model (auto-detect)' },
+            { value: 'gemma-3-27b-it-qat', label: 'Gemma 3 27B' },
+            { value: 'qwen2.5-14b-instruct', label: 'Qwen2.5 14B' },
+            { value: 'mistral-7b-instruct', label: 'Mistral 7B Instruct' },
+        ],
+        info: null,
+    },
+    groq: {
+        label: 'Groq',
+        showUrl: false,
+        defaultUrl: 'https://api.groq.com/openai/v1/chat/completions',
+        urlHint: '',
+        keyRequired: true,
+        keyLabel: 'Groq API Key',
+        keyHint: 'Get your free key at console.groq.com — no credit card required.',
+        keyPlaceholder: 'gsk_...',
+        models: [
+            { value: 'llama-3.3-70b-versatile', label: 'Llama 3.3 70B Versatile' },
+            { value: 'llama3-8b-8192', label: 'Llama 3 8B (fast)' },
+            { value: 'gemma2-9b-it', label: 'Gemma 2 9B' },
+            { value: 'mixtral-8x7b-32768', label: 'Mixtral 8x7B' },
+        ],
+        info: '⚡ <strong>Groq — Free tier.</strong> No credit card. Up to 14,400 req/day on Llama 3.3 70B at ~300 tok/s. Get API key at <a href="https://console.groq.com" target="_blank">console.groq.com</a>.',
+    },
+    gemini: {
+        label: 'Google Gemini',
+        showUrl: false,
+        defaultUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+        urlHint: '',
+        keyRequired: true,
+        keyLabel: 'Google AI Studio API Key',
+        keyHint: 'Get your free key at aistudio.google.com/apikey — no credit card required.',
+        keyPlaceholder: 'AIza...',
+        models: [
+            { value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash' },
+            { value: 'gemini-2.5-flash-preview-05-20', label: 'Gemini 2.5 Flash Preview' },
+            { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash' },
+            { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro' },
+        ],
+        info: '✦ <strong>Google Gemini — Free tier.</strong> 1,500 req/day, 1M token context, no credit card. Get API key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>.',
+    },
+    openai: {
+        label: 'OpenAI',
+        showUrl: false,
+        defaultUrl: 'https://api.openai.com/v1/chat/completions',
+        urlHint: '',
+        keyRequired: true,
+        keyLabel: 'OpenAI API Key',
+        keyHint: 'Get your key at platform.openai.com/api-keys. Requires billing setup.',
+        keyPlaceholder: 'sk-...',
+        models: [
+            { value: 'gpt-4o', label: 'GPT-4o' },
+            { value: 'gpt-4o-mini', label: 'GPT-4o Mini' },
+            { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
+            { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo' },
+        ],
+        info: '◎ <strong>OpenAI — Paid.</strong> Requires a billing-enabled account. Key at <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a>.',
+    },
+    openrouter: {
+        label: 'OpenRouter',
+        showUrl: false,
+        defaultUrl: 'https://openrouter.ai/api/v1/chat/completions',
+        urlHint: '',
+        keyRequired: true,
+        keyLabel: 'OpenRouter API Key',
+        keyHint: 'Free models available with no credit card. Get key at openrouter.ai/keys.',
+        keyPlaceholder: 'sk-or-...',
+        models: [
+            { value: 'meta-llama/llama-4-scout:free', label: 'Llama 4 Scout (free)' },
+            { value: 'google/gemini-2.0-flash-exp:free', label: 'Gemini 2.0 Flash Exp (free)' },
+            { value: 'deepseek/deepseek-r1:free', label: 'DeepSeek R1 (free)' },
+            { value: 'microsoft/phi-4:free', label: 'Phi-4 (free)' },
+            { value: 'meta-llama/llama-3.3-70b-instruct:free', label: 'Llama 3.3 70B (free)' },
+        ],
+        info: '⇄ <strong>OpenRouter — Free models available.</strong> 200 req/day on free models, no credit card. Get key at <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>.',
+    },
+    custom: {
+        label: 'Custom',
+        showUrl: true,
+        defaultUrl: '',
+        urlHint: 'Any OpenAI-compatible endpoint.',
+        keyRequired: false,
+        keyLabel: 'API Key / Bearer Token',
+        keyHint: 'Include if your endpoint requires authentication.',
+        keyPlaceholder: 'sk-... or leave blank',
+        models: [
+            { value: 'custom-model', label: 'Enter model ID below' },
+        ],
+        info: null,
+    },
+};
 
-    function updateStatus(online) {
-        if (online) {
-            statusDot.classList.add('online');
-            statusLabel.textContent = 'Connected';
-        } else {
-            statusDot.classList.remove('online');
-            statusLabel.textContent = 'Offline';
-        }
-    }
+// ── State ─────────────────────────────────────────────────────────────────────
+let currentProvider = 'local';
 
-    // Ping the base URL to check connectivity
-    async function pingServer() {
-        const raw = apiUrlInput.value.trim();
-        if (!raw) { updateStatus(false); return; }
-        try {
-            const base = new URL(raw).origin;
-            const res = await fetch(base + '/v1/models', { method: 'GET', signal: AbortSignal.timeout(2000) });
-            updateStatus(res.ok || res.status === 404); // 404 still means server is up
-        } catch { updateStatus(false); }
-    }
-    apiUrlInput.addEventListener('change', pingServer);
-    pingServer();
+// ── DOM refs ──────────────────────────────────────────────────────────────────
+const providerPills  = document.querySelectorAll('.provider-pill');
+const providerInfo   = document.getElementById('provider-info');
+const fieldUrl       = document.getElementById('field-url');
+const apiUrlInput    = document.getElementById('api-url');
+const urlHintEl      = document.getElementById('url-hint');
+const modelSelect    = document.getElementById('model-select');
+const fieldKey       = document.getElementById('field-key');
+const apiKeyInput    = document.getElementById('api-key');
+const keyLabelEl     = document.getElementById('key-label');
+const keyHintEl      = document.getElementById('key-hint');
+const btnEye         = document.getElementById('btn-eye');
+const statusDot      = document.getElementById('status-dot');
+const statusLabel    = document.getElementById('status-label');
 
-    // ── Copy report ──
-    document.getElementById('copy-btn').addEventListener('click', () => {
-        const text = document.getElementById('output-content').innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            const btn = document.getElementById('copy-btn');
-            const orig = btn.textContent;
-            btn.textContent = '✓ Copied';
-            setTimeout(() => btn.textContent = orig, 2000);
-        });
+// ── Apply provider config to UI ───────────────────────────────────────────────
+function applyProvider(key) {
+    currentProvider = key;
+    const p = PROVIDERS[key];
+
+    // Pills
+    providerPills.forEach(pill => {
+        pill.classList.toggle('active', pill.dataset.provider === key);
     });
 
-    // ── Generate ──
-    document.getElementById('generate-btn').addEventListener('click', async () => {
-        const projectType = document.getElementById('project-type').value;
-        const compliance  = document.getElementById('compliance').value;
-        const techStack   = document.getElementById('tech-stack').value.trim();
-        const apiUrl      = document.getElementById('api-url').value.trim();
-        const apiKey      = document.getElementById('api-key').value.trim();
-        const modelChoice = document.getElementById('model-select').value;
-        
-        const emptyState = document.getElementById('empty-state');
-        const outputContent = document.getElementById('output-content');
-        const skeleton   = document.getElementById('loading-skeleton');
-        const spinner    = document.getElementById('btn-spinner');
-        const generateBtn = document.getElementById('generate-btn');
-        const copyBtn    = document.getElementById('copy-btn');
+    // Info box
+    if (p.info) {
+        providerInfo.innerHTML = p.info;
+        providerInfo.classList.add('visible');
+    } else {
+        providerInfo.classList.remove('visible');
+    }
 
-        if (!techStack) {
-            document.getElementById('tech-stack').focus();
-            document.getElementById('tech-stack').style.borderColor = 'var(--danger)';
-            setTimeout(() => document.getElementById('tech-stack').style.borderColor = '', 2000);
-            return;
-        }
+    // URL field
+    if (p.showUrl) {
+        fieldUrl.style.display = 'block';
+        apiUrlInput.value = apiUrlInput.value || p.defaultUrl;
+        apiUrlInput.placeholder = p.defaultUrl || 'https://...';
+        urlHintEl.textContent = p.urlHint;
+    } else {
+        fieldUrl.style.display = 'none';
+        apiUrlInput.value = p.defaultUrl; // set internally but hidden
+    }
 
-        // Loading state
-        emptyState.style.display = 'none';
-        outputContent.style.display = 'none';
-        skeleton.style.display = 'block';
-        copyBtn.style.display = 'none';
-        spinner.style.display = 'block';
-        generateBtn.disabled = true;
+    // Model dropdown
+    modelSelect.innerHTML = '';
+    p.models.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.value;
+        opt.textContent = m.label;
+        modelSelect.appendChild(opt);
+    });
 
-        let systemPrompt = `You are a senior Cybersecurity Architect with 15+ years of experience. You must ONLY answer in valid JSON format. Do not include any plain text outside the JSON. Use the following exact JSON structure:
+    // Key field
+    const keyLabelSpan = keyLabelEl;
+    keyLabelSpan.childNodes[0].textContent = p.keyLabel + ' ';
+    const hint = keyLabelSpan.querySelector('.lbl-hint');
+    if (p.keyRequired) {
+        hint.textContent = '(required)';
+        hint.style.color = 'var(--warn)';
+        fieldKey.style.display = 'block';
+    } else if (key === 'local') {
+        hint.textContent = '(optional)';
+        hint.style.color = 'var(--text-dim)';
+        fieldKey.style.display = 'block';
+    } else {
+        hint.textContent = '';
+        fieldKey.style.display = 'block';
+    }
+    apiKeyInput.placeholder = p.keyPlaceholder;
+    keyHintEl.textContent = p.keyHint;
+
+    // Clear key on provider switch (don't leak keys between providers)
+    apiKeyInput.value = '';
+
+    updateStatus(false);
+    pingServer();
+}
+
+// ── Provider pill clicks ──────────────────────────────────────────────────────
+providerPills.forEach(pill => {
+    pill.addEventListener('click', () => applyProvider(pill.dataset.provider));
+});
+
+// ── Eye toggle ────────────────────────────────────────────────────────────────
+btnEye.addEventListener('click', () => {
+    const isPass = apiKeyInput.type === 'password';
+    apiKeyInput.type = isPass ? 'text' : 'password';
+    btnEye.textContent = isPass ? '🙈' : '👁';
+});
+
+// ── Connectivity ping ─────────────────────────────────────────────────────────
+function updateStatus(online) {
+    if (online) {
+        statusDot.classList.add('online');
+        statusLabel.textContent = 'Connected';
+    } else {
+        statusDot.classList.remove('online');
+        statusLabel.textContent = 'Offline';
+    }
+}
+
+async function pingServer() {
+    const p = PROVIDERS[currentProvider];
+    // Only ping local/custom — remote APIs don't expose /models without auth
+    if (!p.showUrl) { updateStatus(false); return; }
+    const raw = apiUrlInput.value.trim();
+    if (!raw) { updateStatus(false); return; }
+    try {
+        const base = new URL(raw).origin;
+        const res = await fetch(base + '/v1/models', {
+            method: 'GET',
+            signal: AbortSignal.timeout(2000)
+        });
+        updateStatus(res.ok || res.status === 404);
+    } catch {
+        updateStatus(false);
+    }
+}
+
+apiUrlInput.addEventListener('change', pingServer);
+
+// ── Build final endpoint URL ──────────────────────────────────────────────────
+function getEndpointUrl() {
+    const p = PROVIDERS[currentProvider];
+    if (p.showUrl) return apiUrlInput.value.trim();
+    return p.defaultUrl;
+}
+
+// ── Copy report ───────────────────────────────────────────────────────────────
+document.getElementById('copy-btn').addEventListener('click', () => {
+    const text = document.getElementById('output-content').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copy-btn');
+        const orig = btn.textContent;
+        btn.textContent = '✓ Copied';
+        setTimeout(() => btn.textContent = orig, 2000);
+    });
+});
+
+// ── Generate ──────────────────────────────────────────────────────────────────
+document.getElementById('generate-btn').addEventListener('click', async () => {
+    const projectType   = document.getElementById('project-type').value;
+    const compliance    = document.getElementById('compliance').value;
+    const techStack     = document.getElementById('tech-stack').value.trim();
+    const apiKey        = apiKeyInput.value.trim();
+    const modelChoice   = modelSelect.value;
+    const endpointUrl   = getEndpointUrl();
+
+    const emptyState    = document.getElementById('empty-state');
+    const outputContent = document.getElementById('output-content');
+    const skeleton      = document.getElementById('loading-skeleton');
+    const spinner       = document.getElementById('btn-spinner');
+    const generateBtn   = document.getElementById('generate-btn');
+    const copyBtn       = document.getElementById('copy-btn');
+
+    if (!techStack) {
+        const ta = document.getElementById('tech-stack');
+        ta.focus();
+        ta.style.borderColor = 'var(--danger)';
+        setTimeout(() => ta.style.borderColor = '', 2000);
+        return;
+    }
+
+    const p = PROVIDERS[currentProvider];
+    if (p.keyRequired && !apiKey) {
+        apiKeyInput.focus();
+        apiKeyInput.style.borderColor = 'var(--danger)';
+        setTimeout(() => apiKeyInput.style.borderColor = '', 2000);
+        keyHintEl.style.color = 'var(--danger)';
+        setTimeout(() => keyHintEl.style.color = 'var(--text-dim)', 2000);
+        return;
+    }
+
+    // Loading state
+    emptyState.style.display    = 'none';
+    outputContent.style.display = 'none';
+    skeleton.style.display      = 'block';
+    copyBtn.style.display       = 'none';
+    spinner.style.display       = 'block';
+    generateBtn.disabled        = true;
+
+    let systemPrompt = `You are a senior Cybersecurity Architect with 15+ years of experience. You must ONLY answer in valid JSON format. Do not include any plain text outside the JSON. Use the following exact JSON structure:
 {
   "project_overview": "brief summary of the system",
   "compliance_target": "target name",
@@ -621,128 +870,125 @@
     }
   ]
 }`;
-        if (compliance !== 'None') {
-            systemPrompt += ` Strictly align all recommendations with ${compliance} compliance requirements.`;
+    if (compliance !== 'None') {
+        systemPrompt += ` Strictly align all recommendations with ${compliance} compliance requirements.`;
+    }
+
+    const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security architecture review: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
+
+    const payload = {
+        model: modelChoice,
+        messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user',   content: userMessage }
+        ],
+        temperature: 0.2,
+        max_tokens: 2000
+    };
+
+    const headers = { 'Content-Type': 'application/json' };
+    if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+
+    try {
+        const response = await fetch(endpointUrl, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            if (response.status === 401) throw new Error('Authentication failed (401). Check your API key.');
+            if (response.status === 403) throw new Error('Forbidden (403). Key may not have access to this model.');
+            if (response.status === 429) throw new Error('Rate limit exceeded (429). Try again in a moment.');
+            let errBody = '';
+            try { errBody = (await response.json()).error?.message || ''; } catch {}
+            throw new Error(`HTTP ${response.status}${errBody ? ': ' + errBody : ''}.`);
         }
 
-        const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security architecture review: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
+        const data = await response.json();
+        const text = data.choices[0].message.content;
 
-        const payload = {
-            model: modelChoice,
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user',   content: userMessage }
-            ],
-            temperature: 0.2,
-            max_tokens: 2000
-        };
-
-        const headers = { 'Content-Type': 'application/json' };
-        if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+        skeleton.style.display = 'none';
 
         try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify(payload)
-            });
+            const cleanText = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
+            const parsedData = JSON.parse(cleanText);
 
-            if (!response.ok) {
-                if (response.status === 401) throw new Error('Authentication failed (401). Check your API key.');
-                throw new Error(`Server returned HTTP ${response.status}.`);
-            }
+            let htmlReport = `
+                <div class="md-output">
+                    <h2 style="margin-top: 0;">Project Overview</h2>
+                    <p>${parsedData.project_overview}</p>
+                    <h2>Compliance Target</h2>
+                    <p style="color: var(--text);">${parsedData.compliance_target}</p>
+                    <h2>Security Recommendations</h2>
+            `;
 
-            const data = await response.json();
-            const text = data.choices[0].message.content;
+            if (parsedData.security_recommendations && Array.isArray(parsedData.security_recommendations)) {
+                parsedData.security_recommendations.forEach(rec => {
+                    let severityColor = 'var(--text-muted)';
+                    const sev = rec.severity.toLowerCase();
+                    if (sev.includes('critical')) severityColor = 'var(--danger)';
+                    else if (sev.includes('high'))     severityColor = 'var(--warn)';
+                    else if (sev.includes('medium'))   severityColor = 'var(--accent)';
 
-            skeleton.style.display = 'none';
-            
-            // ── STRATEGY 2: Parsing and mitigating "Chatty Behavior" ──
-            try {
-                // Strip markdown codeblocks
-                const cleanText = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
-                
-                // Parse the JSON string into a JavaScript object
-                const parsedData = JSON.parse(cleanText);
-
-                // Build readable HTML out of the structured JSON data
-                let htmlReport = `
-                    <div class="md-output">
-                        <h2 style="margin-top: 0;">Project Overview</h2>
-                        <p>${parsedData.project_overview}</p>
-
-                        <h2>Compliance Target</h2>
-                        <p style="color: var(--text);">${parsedData.compliance_target}</p>
-
-                        <h2>Security Recommendations</h2>
-                `;
-
-                // Loop through the array of recommendations and build a card for each
-                if (parsedData.security_recommendations && Array.isArray(parsedData.security_recommendations)) {
-                    parsedData.security_recommendations.forEach(rec => {
-                        
-                        // Determine the badge color based on severity
-                        let severityColor = 'var(--text-muted)';
-                        const severityLower = rec.severity.toLowerCase();
-                        if (severityLower.includes('critical')) severityColor = 'var(--danger)';
-                        else if (severityLower.includes('high')) severityColor = 'var(--warn)';
-                        else if (severityLower.includes('medium')) severityColor = 'var(--accent)';
-
-                        htmlReport += `
-                            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 16px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
-                                    <h3 style="margin: 0; color: var(--text); font-size: 14px;">${rec.category}</h3>
-                                    <span style="font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: ${severityColor}; background: rgba(255,255,255,0.03); border: 1px solid ${severityColor}; border-radius: 4px; padding: 3px 8px;">
-                                        ${rec.severity}
-                                    </span>
-                                </div>
-                                <p style="margin-bottom: 8px;"><strong>Finding:</strong> <span style="color: var(--text);">${rec.finding}</span></p>
-                                <p style="margin: 0;"><strong>Remediation:</strong> ${rec.remediation}</p>
+                    htmlReport += `
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
+                                <h3 style="margin: 0; color: var(--text); font-size: 14px;">${rec.category}</h3>
+                                <span style="font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: ${severityColor}; background: rgba(255,255,255,0.03); border: 1px solid ${severityColor}; border-radius: 4px; padding: 3px 8px;">
+                                    ${rec.severity}
+                                </span>
                             </div>
-                        `;
-                    });
-                }
-
-                htmlReport += `</div>`; // Close md-output
-
-                // Inject the generated HTML into the page
-                outputContent.innerHTML = htmlReport;
-                copyBtn.style.display = 'inline-block';
-
-            } catch (jsonError) {
-                // Failsafe for if the model ignored instructions and output plain text
-                outputContent.innerHTML = `
-                    <div class="error-box">
-                        <strong>⚠ JSON Decode Error:</strong> The model did not output valid JSON (Chatty Behavior detected).<br><br>
-                        <strong>Raw Output:</strong><br>
-                        <pre style="margin-top: 10px; white-space: pre-wrap; font-family: var(--mono); font-size: 11px;">${text}</pre>
-                    </div>`;
+                            <p style="margin-bottom: 8px;"><strong>Finding:</strong> <span style="color: var(--text);">${rec.finding}</span></p>
+                            <p style="margin: 0;"><strong>Remediation:</strong> ${rec.remediation}</p>
+                        </div>
+                    `;
+                });
             }
 
-            outputContent.style.display = 'block';
+            htmlReport += `</div>`;
+            outputContent.innerHTML = htmlReport;
             copyBtn.style.display = 'inline-block';
-            updateStatus(true);
 
-        } catch (err) {
-            console.error(err);
-            skeleton.style.display = 'none';
+        } catch (jsonError) {
             outputContent.innerHTML = `
                 <div class="error-box">
-                    <strong>⚠ Connection Error:</strong> ${err.message}
-                    <ul>
-                        <li>Is your local LLM server running? (LM Studio, Ollama, etc.)</li>
-                        <li>Check CORS settings on your inference server.</li>
-                        <li>If this page is hosted over HTTPS, the browser will block HTTP localhost requests — run it locally.</li>
-                        <li>Verify the endpoint URL is correct and the model is loaded.</li>
-                    </ul>
+                    <strong>⚠ JSON Decode Error:</strong> The model did not output valid JSON (Chatty Behavior detected).<br><br>
+                    <strong>Raw Output:</strong><br>
+                    <pre style="margin-top: 10px; white-space: pre-wrap; font-family: var(--mono); font-size: 11px;">${text}</pre>
                 </div>`;
-            outputContent.style.display = 'block';
-            updateStatus(false);
-        } finally {
-            spinner.style.display = 'none';
-            generateBtn.disabled = false;
         }
-    });
+
+        outputContent.style.display = 'block';
+        copyBtn.style.display = 'inline-block';
+        updateStatus(true);
+
+    } catch (err) {
+        console.error(err);
+        skeleton.style.display = 'none';
+
+        const isLocal = PROVIDERS[currentProvider].showUrl;
+        outputContent.innerHTML = `
+            <div class="error-box">
+                <strong>⚠ Request Failed:</strong> ${err.message}
+                <ul>
+                    ${isLocal ? '<li>Is your local LLM server running? (LM Studio, Ollama)</li>' : ''}
+                    ${isLocal ? '<li>Check the endpoint URL and make sure the model is loaded.</li>' : ''}
+                    ${!isLocal ? '<li>Double-check your API key — paste it again carefully.</li>' : ''}
+                    ${!isLocal ? '<li>Make sure the selected model is available on your account.</li>' : ''}
+                    <li>Open DevTools → Network tab to inspect the raw response.</li>
+                </ul>
+            </div>`;
+        outputContent.style.display = 'block';
+        updateStatus(false);
+    } finally {
+        spinner.style.display = 'none';
+        generateBtn.disabled = false;
+    }
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+applyProvider('local');
 </script>
 </body>
 </html>
