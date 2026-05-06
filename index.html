@@ -596,12 +596,24 @@
         spinner.style.display = 'block';
         generateBtn.disabled = true;
 
-        let systemPrompt = `You are a senior Cybersecurity Architect with 15+ years of experience. Produce a structured, prioritized security checklist in Markdown. Use clear headers (##), bullet points, and **bold** for critical items. Be specific and technical — no filler text. Start directly with the content.`;
+        let systemPrompt = `You are a senior Cybersecurity Architect with 15+ years of experience. You must ONLY answer in valid JSON format. Do not include any plain text outside the JSON. Use the following exact JSON structure:
+{
+  "project_overview": "brief summary of the system",
+  "compliance_target": "target name",
+  "security_recommendations": [
+    {
+      "category": "e.g., Authentication, Network, Data Protection",
+      "severity": "Critical | High | Medium | Low",
+      "finding": "Short description of the risk",
+      "remediation": "Specific technical fix"
+    }
+  ]
+}`;
         if (compliance !== 'None') {
             systemPrompt += ` Strictly align all recommendations with ${compliance} compliance requirements.`;
         }
 
-        const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security checklist covering: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
+        const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security architecture review: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
 
         const payload = {
             model: 'local-model',
@@ -609,7 +621,7 @@
                 { role: 'system', content: systemPrompt },
                 { role: 'user',   content: userMessage }
             ],
-            temperature: 0.6,
+            temperature: 0.2,
             max_tokens: 2000
         };
 
@@ -632,7 +644,30 @@
             const text = data.choices[0].message.content;
 
             skeleton.style.display = 'none';
-            outputContent.innerHTML = marked.parse(text);
+            
+            // ── STRATEGY 2: Parsing and mitigating "Chatty Behavior" ──
+            try {
+                // Strip markdown codeblocks (```json and ```) in case the model wraps the output
+                const cleanText = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
+                
+                // Parse the JSON string into a JavaScript object
+                const parsedData = JSON.parse(cleanText);
+
+                // Re-stringify with formatting for a clean UI presentation
+                const formattedJSON = JSON.stringify(parsedData, null, 4);
+
+                outputContent.innerHTML = `<pre style="background: transparent; border: none; padding: 0;"><code style="color: var(--accent-hi);">${formattedJSON}</code></pre>`;
+                copyBtn.style.display = 'inline-block';
+            } catch (jsonError) {
+                // Failsafe for if the model ignored instructions and output plain text
+                outputContent.innerHTML = `
+                    <div class="error-box">
+                        <strong>⚠ JSON Decode Error:</strong> The model did not output valid JSON (Chatty Behavior detected).<br><br>
+                        <strong>Raw Output:</strong><br>
+                        <pre style="margin-top: 10px; white-space: pre-wrap; font-family: var(--mono); font-size: 11px;">${text}</pre>
+                    </div>`;
+            }
+
             outputContent.style.display = 'block';
             copyBtn.style.display = 'inline-block';
             updateStatus(true);
