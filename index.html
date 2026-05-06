@@ -647,17 +647,56 @@
             
             // ── STRATEGY 2: Parsing and mitigating "Chatty Behavior" ──
             try {
-                // Strip markdown codeblocks (```json and ```) in case the model wraps the output
+                // Strip markdown codeblocks
                 const cleanText = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
                 
                 // Parse the JSON string into a JavaScript object
                 const parsedData = JSON.parse(cleanText);
 
-                // Re-stringify with formatting for a clean UI presentation
-                const formattedJSON = JSON.stringify(parsedData, null, 4);
+                // Build readable HTML out of the structured JSON data
+                let htmlReport = `
+                    <div class="md-output">
+                        <h2 style="margin-top: 0;">Project Overview</h2>
+                        <p>${parsedData.project_overview}</p>
 
-                outputContent.innerHTML = `<pre style="background: transparent; border: none; padding: 0;"><code style="color: var(--accent-hi);">${formattedJSON}</code></pre>`;
+                        <h2>Compliance Target</h2>
+                        <p style="color: var(--text);">${parsedData.compliance_target}</p>
+
+                        <h2>Security Recommendations</h2>
+                `;
+
+                // Loop through the array of recommendations and build a card for each
+                if (parsedData.security_recommendations && Array.isArray(parsedData.security_recommendations)) {
+                    parsedData.security_recommendations.forEach(rec => {
+                        
+                        // Determine the badge color based on severity
+                        let severityColor = 'var(--text-muted)';
+                        const severityLower = rec.severity.toLowerCase();
+                        if (severityLower.includes('critical')) severityColor = 'var(--danger)';
+                        else if (severityLower.includes('high')) severityColor = 'var(--warn)';
+                        else if (severityLower.includes('medium')) severityColor = 'var(--accent)';
+
+                        htmlReport += `
+                            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
+                                    <h3 style="margin: 0; color: var(--text); font-size: 14px;">${rec.category}</h3>
+                                    <span style="font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: ${severityColor}; background: rgba(255,255,255,0.03); border: 1px solid ${severityColor}; border-radius: 4px; padding: 3px 8px;">
+                                        ${rec.severity}
+                                    </span>
+                                </div>
+                                <p style="margin-bottom: 8px;"><strong>Finding:</strong> <span style="color: var(--text);">${rec.finding}</span></p>
+                                <p style="margin: 0;"><strong>Remediation:</strong> ${rec.remediation}</p>
+                            </div>
+                        `;
+                    });
+                }
+
+                htmlReport += `</div>`; // Close md-output
+
+                // Inject the generated HTML into the page
+                outputContent.innerHTML = htmlReport;
                 copyBtn.style.display = 'inline-block';
+
             } catch (jsonError) {
                 // Failsafe for if the model ignored instructions and output plain text
                 outputContent.innerHTML = `
