@@ -435,32 +435,28 @@
 
                 <!-- API config -->
                 <div class="config-section">
-                    <div class="config-label">API Configuration</div>
+                    <div class="config-label">API Endpoint</div>
+                    <div class="field">
+                        <label for="api-url">Server URL</label>
+                        <input type="text" id="api-url" value="http://localhost:1234/v1/chat/completions"
+                            placeholder="http://localhost:1234/v1/chat/completions">
+                        <p class="field-hint">LM Studio default. Use port 11434 for Ollama.</p>
+                    </div>
                     
                     <div class="field">
-                        <label for="api-provider">Provider</label>
-                        <select id="api-provider">
-                            <option value="local">Local Model (LM Studio / Ollama)</option>
-                            <option value="gemini">Google Gemini API</option>
+                        <label for="api-key">Bearer Token <span style="color:var(--text-dim); font-weight:400">(optional)</span></label>
+                        <input type="password" id="api-key" placeholder="sk-… or leave blank for local servers">
+                    </div>
+                    
+                    <div class="field">
+                        <label for="model-select">Model Selection</label>
+                        <select id="model-select">
+                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            <option value="local-model">Local Model</option>
                         </select>
                     </div>
 
-                    <div class="field">
-                        <label for="api-url">API Endpoint</label>
-                        <input type="text" id="api-url" value="http://localhost:1234/v1/chat/completions"
-                            placeholder="http://localhost:1234/v1/chat/completions">
-                        <p class="field-hint" id="url-hint">LM Studio default. Use port 11434 for Ollama.</p>
-                    </div>
-
-                    <div class="field">
-                        <label for="api-model">Model</label>
-                        <input type="text" id="api-model" value="local-model" placeholder="Model identifier (e.g. local-model)">
-                    </div>
-
-                    <div class="field">
-                        <label for="api-key">API Key / Bearer Token</label>
-                        <input type="password" id="api-key" placeholder="sk-… or leave blank for local servers">
-                    </div>
                 </div>
 
                 <div class="divider"></div>
@@ -542,51 +538,23 @@
 </footer>
 
 <script>
-    // ── UI Elements ──
-    const providerSelect = document.getElementById('api-provider');
-    const apiUrlInput = document.getElementById('api-url');
-    const apiModelInput = document.getElementById('api-model');
-    const apiKeyInput = document.getElementById('api-key');
-    const urlHint = document.getElementById('url-hint');
-    const statusDot = document.getElementById('status-dot');
+    // ── Status dot reflects API URL field ──
+    const statusDot   = document.getElementById('status-dot');
     const statusLabel = document.getElementById('status-label');
+    const apiUrlInput = document.getElementById('api-url');
 
-    // ── Provider Switching Logic ──
-    providerSelect.addEventListener('change', (e) => {
-        if (e.target.value === 'gemini') {
-            // Switch to Gemini's OpenAI-compatible endpoint
-            apiUrlInput.value = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
-            urlHint.textContent = 'Using Google Gemini OpenAI-compatible endpoint.';
-            apiModelInput.value = 'gemini-1.5-pro';
-            apiKeyInput.placeholder = 'Enter your Gemini API key...';
-        } else {
-            // Revert to local setup
-            apiUrlInput.value = 'http://localhost:1234/v1/chat/completions';
-            urlHint.textContent = 'LM Studio default. Use port 11434 for Ollama.';
-            apiModelInput.value = 'local-model';
-            apiKeyInput.placeholder = 'sk-… or leave blank for local servers';
-        }
-        pingServer();
-    });
-
-    // ── Status dot connectivity ──
     function updateStatus(online) {
         if (online) {
             statusDot.classList.add('online');
-            statusLabel.textContent = 'Ready';
+            statusLabel.textContent = 'Connected';
         } else {
             statusDot.classList.remove('online');
             statusLabel.textContent = 'Offline';
         }
     }
 
-    // Ping the base URL to check connectivity (for local environments)
+    // Ping the base URL to check connectivity
     async function pingServer() {
-        if (providerSelect.value === 'gemini') {
-            updateStatus(true); // Assume cloud API is up if provider is Gemini
-            return;
-        }
-
         const raw = apiUrlInput.value.trim();
         if (!raw) { updateStatus(false); return; }
         try {
@@ -595,7 +563,6 @@
             updateStatus(res.ok || res.status === 404); // 404 still means server is up
         } catch { updateStatus(false); }
     }
-    
     apiUrlInput.addEventListener('change', pingServer);
     pingServer();
 
@@ -616,9 +583,9 @@
         const compliance  = document.getElementById('compliance').value;
         const techStack   = document.getElementById('tech-stack').value.trim();
         const apiUrl      = document.getElementById('api-url').value.trim();
-        const apiModel    = document.getElementById('api-model').value.trim();
         const apiKey      = document.getElementById('api-key').value.trim();
-
+        const modelChoice = document.getElementById('model-select').value;
+        
         const emptyState = document.getElementById('empty-state');
         const outputContent = document.getElementById('output-content');
         const skeleton   = document.getElementById('loading-skeleton');
@@ -661,13 +628,13 @@
         const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security architecture review: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
 
         const payload = {
-            model: apiModel || 'local-model', // Uses the newly added Model input
+            model: modelChoice,
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user',   content: userMessage }
             ],
             temperature: 0.2,
-            response_format: { type: "json_object" } // added to help Gemini/OpenAI enforce JSON
+            max_tokens: 2000
         };
 
         const headers = { 'Content-Type': 'application/json' };
