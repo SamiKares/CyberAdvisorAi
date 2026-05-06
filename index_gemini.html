@@ -603,38 +603,16 @@
         spinner.style.display = 'block';
         generateBtn.disabled = true;
 
-        let systemPrompt = `You are a senior Cybersecurity Architect.`;
+        // Give the AI strict instructions on formatting
+        let systemPrompt = `You are a senior Cybersecurity Architect. You MUST output your response as a raw, valid JSON object following this exact schema: {"project_overview": "string", "compliance_target": "string", "security_recommendations": [{"category": "string", "severity": "Critical|High|Medium|Low", "finding": "string", "remediation": "string"}]}. Do not include any plain text outside the JSON.`;
+        
         if (compliance !== 'None') {
             systemPrompt += ` Strictly align all recommendations with ${compliance} compliance requirements.`;
         }
 
         const userMessage = `Project: ${projectType}\nStack: ${techStack}\n\nDeliver a comprehensive security architecture review: authentication & authorization, data protection, network security, dependency & supply chain risks, logging & monitoring, incident response, and any technology-specific hardening steps.`;
 
-        // 1. Define the Structured Output Schema
-        const securitySchema = {
-            type: "OBJECT",
-            properties: {
-                project_overview: { type: "STRING" },
-                compliance_target: { type: "STRING" },
-                security_recommendations: {
-                    type: "ARRAY",
-                    items: {
-                        type: "OBJECT",
-                        properties: {
-                            category: { type: "STRING", description: "e.g., Authentication, Network, Data Protection" },
-                            severity: { type: "STRING", description: "Critical | High | Medium | Low" },
-                            finding: { type: "STRING", description: "Short description of the risk" },
-                            remediation: { type: "STRING", description: "Specific technical fix" }
-                        },
-                        required: ["category", "severity", "finding", "remediation"]
-                    }
-                }
-            },
-            required: ["project_overview", "compliance_target", "security_recommendations"]
-        };
-
-        // 2. Payload
-        // 2. Determine API Dialect and Build Payload
+        // Determine API Dialect and Build Payload
         const isGemini = apiUrl.includes("googleapis.com");
         let finalUrl = apiUrl;
         let payload;
@@ -642,7 +620,6 @@
 
         if (isGemini) {
             // --- Gemini API Format ---
-            // If the user put the key in the Bearer Token field instead of the URL, append it
             if (apiKey && !finalUrl.includes('key=')) {
                 finalUrl = `${finalUrl}?key=${apiKey}`;
             }
@@ -684,15 +661,18 @@
 
             const data = await response.json();
             
-            // 3. Extract exact JSON string based on API response structure
-            const text = isGemini 
+            // Extract text based on API response structure
+            let text = isGemini 
                 ? data.candidates[0].content.parts[0].text 
                 : data.choices[0].message.content;
+            
+            // Clean up Markdown backticks if the model ignores our formatting rules
+            text = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
             
             skeleton.style.display = 'none';
             
             try {
-                // Parse the JSON string into a JavaScript object directly (no RegEx cleaning needed!)
+                // Parse the JSON string into a JavaScript object
                 const parsedData = JSON.parse(text);
 
                 // Build readable HTML out of the structured JSON data
@@ -711,7 +691,6 @@
                 if (parsedData.security_recommendations && Array.isArray(parsedData.security_recommendations)) {
                     parsedData.security_recommendations.forEach(rec => {
                         
-                        // Determine the badge color based on severity
                         let severityColor = 'var(--text-muted)';
                         const severityLower = rec.severity.toLowerCase();
                         if (severityLower.includes('critical')) severityColor = 'var(--danger)';
@@ -735,12 +714,10 @@
 
                 htmlReport += `</div>`; // Close md-output
 
-                // Inject the generated HTML into the page
                 outputContent.innerHTML = htmlReport;
                 copyBtn.style.display = 'inline-block';
 
             } catch (jsonError) {
-                // Failsafe for if the model ignored instructions and output plain text
                 outputContent.innerHTML = `
                     <div class="error-box">
                         <strong>⚠ JSON Decode Error:</strong> The model did not output valid JSON (Chatty Behavior detected).<br><br>
@@ -750,7 +727,6 @@
             }
 
             outputContent.style.display = 'block';
-            copyBtn.style.display = 'inline-block';
             updateStatus(true);
 
         } catch (err) {
