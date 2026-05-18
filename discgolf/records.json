@@ -1,6 +1,37 @@
-
 {
   "fullBag": [
+    {
+      "course": "Tali Kesä",
+      "layout": "2025 (18h)",
+      "records": [
+        { "score": "-2", "player": "Aleksi Siau", "detail": "" }
+      ]
+    },
+    {
+      "course": "Varistonniitty",
+      "layout": "Main (18h, Par 60)",
+      "records": [
+        { "score": "-1 (59)", "player": "Hesus Jesus", "detail": "" },
+        { "score": "+1 (61)", "player": "Aleksi Siau", "detail": "" },
+        { "score": "+1 (61)", "player": "Ode Bisi", "detail": "" },
+        { "score": "+1 (61)", "player": "Jermu #69.6", "detail": "" },
+        { "score": "+2 (62)", "player": "Tauno Lepponen", "detail": "" },
+        { "score": "+4 (64)", "player": "Tommy Islander", "detail": "" }
+      ]
+    },
+    {
+      "course": "Äijänpelto",
+      "layout": "Main (18h, Par 67)",
+      "records": [
+        { "score": "-1 (66)", "player": "Tauno Lepponen", "detail": "" },
+        { "score": "-1 (66)", "player": "Hesus Jesus", "detail": "" },
+        { "score": "+2 (69)", "player": "Ode Bisi", "detail": "" },
+        { "score": "+4 (71)", "player": "Aleksi Siau", "detail": "" },
+        { "score": "+7 (74)", "player": "Tommy Islander", "detail": "" },
+        { "score": "+7 (74)", "player": "Jonas S", "detail": "" },
+        { "score": "+10 (77)", "player": "Karri H", "detail": "" }
+      ]
+    },
     {
       "course": "Paloheinä Disc Golf Park",
       "layout": "Main 2025 (18h, Par 54)",
@@ -10,12 +41,110 @@
       ]
     },
     {
+      "course": "Siltamäki",
+      "layout": "Main",
+      "records": []
+    },
+    {
+      "course": "Ford Amateur DiscGolfPark",
+      "layout": "Main (18h, Par 56)",
+      "records": [
+        { "score": "-10 (46)", "player": "Ode Bisi", "detail": "" },
+        { "score": "-8 (48)", "player": "Jonas S", "detail": "" },
+        { "score": "-8 (48)", "player": "Hesus Jesus", "detail": "" },
+        { "score": "-7 (49)", "player": "Tauno Lepponen", "detail": "" },
+        { "score": "-6 (50)", "player": "Tommy Islander", "detail": "" },
+        { "score": "-5 (51)", "player": "Karri H", "detail": "" },
+        { "score": "-4 (52)", "player": "Aleksi Siau", "detail": "" }
+      ]
+    },
+    {
+      "course": "Ford DiscGolfPark Sininen",
+      "layout": "(kesä 2026) väliaikainen (18h, Par 59)",
+      "records": [
+        { "score": "+8 (67)", "player": "Karri H", "detail": "" },
+        { "score": "+11 (70)", "player": "Jonas S", "detail": "" },
+        { "score": "+12 (71)", "player": "Ode Bisi", "detail": "" },
+        { "score": "+18 (77)", "player": "Jermu #69.6", "detail": "" }
+      ]
+    },
+    {
+      "course": "Herusten Frisbeegolfrata",
+      "layout": "Main (18h, Par 58)",
+      "records": [
+        { "score": "-6 (52)", "player": "Hesus Jesus", "detail": "" },
+        { "score": "-4 (54)", "player": "Jonas S", "detail": "" },
+        { "score": "-4 (54)", "player": "Karri H", "detail": "" },
+        { "score": "-4 (54)", "player": "Ode Bisi", "detail": "" },
+        { "score": "-4 (54)", "player": "Jermu #69.6", "detail": "" },
+        { "score": "-3 (55)", "player": "Tommy Islander", "detail": "" },
+        { "score": "-3 (55)", "player": "Aleksi Siau", "detail": "" }
+      ]
+    },
+    {
+      "course": "Keinukallio Frisbeegolf",
+      "layout": "Main (18h, Par 62)",
+      "records": [
+        { "score": "E (62)", "player": "Hesus Jesus", "detail": "" },
+        { "score": "+3 (65)", "player": "Ode Bisi", "detail": "" },
+        { "score": "+7 (69)", "player": "Tauno Lepponen", "detail": "" },
+        { "score": "+7 (69)", "player": "Jonas S", "detail": "" },
+        { "score": "+8 (70)", "player": "Jermu #69.6", "detail": "" },
+        { "score": "+9 (71)", "player": "Daniel Sparrow", "detail": "" },
+        { "score": "+9 (71)", "player": "Aleksi Siau", "detail": "" }
+      ]
+    },
+    {
+      "course": "Lemmenlaakson Frisbeegolfrata",
+      "layout": "Main (18h, Par 59)",
+      "records": [
+        { "score": "-4 (55)", "player": "Ode Bisi", "detail": "" },
+        { "score": "-2 (57)", "player": "Hesus Jesus", "detail": "" },
+        { "score": "+1 (60)", "player": "Aleksi Siau", "detail": "" },
+        { "score": "+2 (61)", "player": "Tommy Islander", "detail": "" },
+        { "score": "+2 (61)", "player": "Jonas S", "detail": "" }
+      ]
+    },
+    {
+      "course": "Meilahti",
+      "layout": "Main (16h, Par 48)",
+      "records": [
+        { "score": "-11 (37)", "player": "Aleksi Siau", "detail": "" },
+        { "score": "-9 (39)", "player": "Santtu Sander", "detail": "" },
+        { "score": "-8 (40)", "player": "Hesus Jesus", "detail": "" },
+        { "score": "-6 (42)", "player": "Ode Bisi", "detail": "" },
+        { "score": "-5 (43)", "player": "Tommy Islander", "detail": "" },
+        { "score": "-5 (43)", "player": "Tauno Lepponen", "detail": "" }
+      ]
+    },
+    {
+      "course": "Oittaa Kalliometsä",
+      "layout": "Main (18h, Par 58)",
+      "records": [
+        { "score": "-6 (52)", "player": "Hesus Jesus", "detail": "" },
+        { "score": "-4 (54)", "player": "Tommy Islander", "detail": "" },
+        { "score": "-2 (56)", "player": "Aleksi Siau", "detail": "" },
+        { "score": "-2 (56)", "player": "Jonas S", "detail": "" },
+        { "score": "+1 (59)", "player": "Ode Bisi", "detail": "" },
+        { "score": "+2 (60)", "player": "Karri H", "detail": "" },
+        { "score": "+3 (61)", "player": "Jermu #69.6", "detail": "" }
+      ]
+    },
+    {
       "course": "Puolarmaari",
       "layout": "Main (20h, Par 60)",
       "records": [
         { "score": "-12 (48)", "player": "Tauno Lepponen", "detail": "" },
         { "score": "-12 (48)", "player": "Aleksi Siau", "detail": "" },
-        { "score": "-11 (49)", "player": "Santtu Sander", "detail": "" }
+        { "score": "-11 (49)", "player": "Santtu Sander", "detail": "" },
+        { "score": "-11 (49)", "player": "Hesus Jesus", "detail": "" },
+        { "score": "-10 (50)", "player": "Jonas S", "detail": "" },
+        { "score": "-10 (50)", "player": "Ode Bisi", "detail": "" },
+        { "score": "-8 (52)", "player": "Tommy Islander", "detail": "" },
+        { "score": "-7 (53)", "player": "Jermu #69.6", "detail": "" },
+        { "score": "-5 (55)", "player": "Daniel Sparrow", "detail": "" },
+        { "score": "-5 (55)", "player": "Karri H", "detail": "" },
+        { "score": "-1 (59)", "player": "jussi p", "detail": "" }
       ]
     },
     {
@@ -24,29 +153,6 @@
       "records": [
         { "score": "-9 (50)", "player": "Hesus Jesus", "detail": "" },
         { "score": "-6 (53)", "player": "Jonas S", "detail": "" }
-      ]
-    },
-    {
-      "course": "Meilahti",
-      "layout": "Main (16h, Par 48)",
-      "records": [
-        { "score": "-11 (37)", "player": "Aleksi Siau", "detail": "" },
-        { "score": "-9 (39)", "player": "Santtu Sander", "detail": "" }
-      ]
-    },
-    {
-      "course": "Tali Kesä",
-      "layout": "2025 (18h)",
-      "records": [
-        { "score": "-2", "player": "Aleksi Siau", "detail": "" }
-      ]
-    },
-    {
-      "course": "Ford DiscGolfPark Sininen",
-      "layout": "(kesä 2026) väliaikainen (18h, Par 59)",
-      "records": [
-        { "score": "+8 (67)", "player": "Karri H", "detail": "" },
-        { "score": "+11", "player": "Jonas S", "detail": "" }
       ]
     }
   ],
