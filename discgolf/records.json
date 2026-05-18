@@ -11,7 +11,7 @@
       "course": "Varistonniitty",
       "layout": "Main (18h, Par 60)",
       "records": [
-        { "score": "-1 (59)", "player": "Hesus Jesus", "detail": "" }
+        { "score": "-1 (59)", "player": "Siltamäen Jeesus", "detail": "" }
       ]
     },
     {
@@ -25,13 +25,15 @@
       "course": "Paloheinä Disc Golf Park",
       "layout": "Main 2025 (18h, Par 54)",
       "records": [
-        { "score": "-11 (43)", "player": "Hesus Jesus", "detail": "" }
+        { "score": "-11 (43)", "player": "Siltamäen Jeesus", "detail": "" }
       ]
     },
     {
-      "course": "Siltamäki",
-      "layout": "Main",
-      "records": []
+      "course": "Siltamäen Frisbeegolfrata",
+      "layout": "2024 Kesä (18h, Par 54)",
+      "records": [
+        { "score": "-13 (41)", "player": "Siltamäen Jeesus", "detail": "" }
+      ]
     },
     {
       "course": "Ford Amateur DiscGolfPark",
@@ -48,17 +50,31 @@
       ]
     },
     {
+      "course": "Ford DiscGolfPark Sininen",
+      "layout": "(kesä 2026) (18h, Par 60)",
+      "records": [
+        { "score": "-1 (59)", "player": "Ode Bisi", "detail": "" }
+      ]
+    },
+    {
       "course": "Herusten Frisbeegolfrata",
       "layout": "Main (18h, Par 58)",
       "records": [
-        { "score": "-6 (52)", "player": "Hesus Jesus", "detail": "" }
+        { "score": "-6 (52)", "player": "Siltamäen Jeesus", "detail": "" }
       ]
     },
     {
       "course": "Keinukallio Frisbeegolf",
       "layout": "Main (18h, Par 62)",
       "records": [
-        { "score": "E (62)", "player": "Hesus Jesus", "detail": "" }
+        { "score": "E (62)", "player": "Siltamäen Jeesus", "detail": "" }
+      ]
+    },
+    {
+      "course": "Kivikko A Blue",
+      "layout": "Main (18h, Par 56)",
+      "records": [
+        { "score": "-6 (50)", "player": "Jonas S", "detail": "" }
       ]
     },
     {
@@ -66,6 +82,13 @@
       "layout": "Main (18h, Par 59)",
       "records": [
         { "score": "-4 (55)", "player": "Ode Bisi", "detail": "" }
+      ]
+    },
+    {
+      "course": "Malmi Lentokenttä",
+      "layout": "Talvi 2024 (9h, Par 28)",
+      "records": [
+        { "score": "+1 (29)", "player": "Jermu #69.6", "detail": "" }
       ]
     },
     {
@@ -79,7 +102,7 @@
       "course": "Oittaa Kalliometsä",
       "layout": "Main (18h, Par 58)",
       "records": [
-        { "score": "-6 (52)", "player": "Hesus Jesus", "detail": "" }
+        { "score": "-6 (52)", "player": "Siltamäen Jeesus", "detail": "" }
       ]
     },
     {
@@ -90,10 +113,17 @@
       ]
     },
     {
+      "course": "Söderkulla Dgp",
+      "layout": "Kausi 2025 (10h, Par 30)",
+      "records": [
+        { "score": "-6 (24)", "player": "Siltamäen Jeesus", "detail": "" }
+      ]
+    },
+    {
       "course": "Talma Kesä",
       "layout": "2026 (18h, Par 59)",
       "records": [
-        { "score": "-9 (50)", "player": "Hesus Jesus", "detail": "" }
+        { "score": "-9 (50)", "player": "Siltamäen Jeesus", "detail": "" }
       ]
     }
   ],
