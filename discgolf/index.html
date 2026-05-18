@@ -3,390 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turvabotti Disc Golf Records</title>
+    <title>Course Records | Turvabotti</title>
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --accent-color: #4caf50;
-            --text-color: #ffffff;
-            --text-muted: #aaaaaa;
+            --bg-base: #0f172a; /* Deep slate */
+            --bg-surface: #1e293b; /* Lighter slate */
+            --bg-elevated: #334155;
+            --accent: #10b981; /* Fresh mint green */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
             margin: 0;
-            padding: 15px;
+            padding: 20px 16px;
+            -webkit-font-smoothing: antialiased;
         }
 
         header {
             text-align: center;
-            padding: 10px 0;
+            margin-bottom: 24px;
         }
 
         h1 {
             margin: 0;
-            font-size: 1.8rem;
-            color: var(--accent-color);
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .subtitle {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 5px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 6px;
         }
 
-        /* Tabs styling for mobile tapping */
+        /* Modern Tabs */
         .tabs {
             display: flex;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            margin: 20px 0;
+            background-color: var(--bg-surface);
+            border-radius: 12px;
             padding: 4px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .tab-btn {
             flex: 1;
-            background: none;
+            background: transparent;
             border: none;
             color: var(--text-muted);
-            padding: 12px;
+            padding: 10px 0;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            border-radius: 6px;
+            border-radius: 8px;
             transition: all 0.2s ease;
         }
 
         .tab-btn.active {
-            background-color: var(--accent-color);
-            color: white;
+            background-color: var(--bg-elevated);
+            color: var(--text-main);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
 
-        /* Content Sections */
-        .tab-content {
-            display: none;
-        }
-
+        .tab-content { display: none; }
         .tab-content.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
-        /* Record Cards */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Minimalist Cards */
         .course-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            background-color: var(--bg-surface);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
         }
 
         .course-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-            padding-bottom: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .course-name {
+            display: block;
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
 
         .layout-info {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            background-color: #333;
+            display: inline-block;
+            font-size: 0.75rem;
+            color: var(--bg-base);
+            background-color: var(--text-muted);
             padding: 2px 8px;
             border-radius: 12px;
-            white-space: nowrap;
+            font-weight: 600;
         }
 
         .leaderboard {
             display: flex;
             flex-direction: column;
-            gap: 8px;
         }
 
         .record-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 0;
+            padding: 10px 0;
+            border-top: 1px solid var(--border-color);
         }
 
-        .record-row:not(:last-child) {
-            border-bottom: 1px dashed #2a2a2a;
+        .record-row:first-child {
+            border-top: none;
+            padding-top: 4px;
         }
 
         .score {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            min-width: 75px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 70px;
         }
 
-        .player-info {
-            text-align: right;
-        }
-
+        .player-info { text-align: right; }
+        
         .player-name {
             font-weight: 500;
+            font-size: 0.95rem;
         }
 
-        .date-disc {
+        .detail-text {
             font-size: 0.75rem;
             color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Error Message */
+        #error-msg {
+            color: #ef4444;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🥏 Course Records</h1>
-        <div class="subtitle">turvabotti.com/discgolf</div>
+        <h1>Course Records</h1>
+        <div class="subtitle">turvabotti / discgolf</div>
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab(event, 'full-bag')">Full Bag</button>
-        <button class="tab-btn" onclick="switchTab(event, 'one-disc')">1-Disc</button>
-        <button class="tab-btn" onclick="switchTab(event, 'doubles')">Doubles</button>
+        <button class="tab-btn active" onclick="switchTab('full-bag')">Full Bag</button>
+        <button class="tab-btn" onclick="switchTab('one-disc')">1-Disc</button>
+        <button class="tab-btn" onclick="switchTab('doubles')">Doubles</button>
     </div>
 
-    <div id="full-bag" class="tab-content active">
+    <div id="error-msg">⚠️ Cannot load records. Check records.json for formatting errors (like missing quotes or commas).</div>
 
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Paloheinä Disc Golf Park</span>
-                <span class="layout-info">Main 2025 (18h, Par 54)</span>
-            </div>
-            <div class="leaderboard">
-                <div class="record-row">
-                    <div class="score">-11 (43)</div>
-                    <div class="player-info">
-                        <div class="player-name">Hesus Jesus</div>
-                    </div>
-                </div>
-                <div class="record-row">
-                    <div class="score">-9 (45)</div>
-                    <div class="player-info">
-                        <div class="player-name">Aleksi Siau</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Puolarmaari</span>
-                <span class="layout-info">Main (20h, Par 60)</span>
-            </div>
-            <div class="leaderboard">
-                <div class="record-row">
-                    <div class="score">-12 (48)</div>
-                    <div class="player-info">
-                        <div class="player-name">Tauno Lepponen</div>
-                    </div>
-                </div>
-                <div class="record-row">
-                    <div class="score">-12 (48)</div>
-                    <div class="player-info">
-                        <div class="player-name">Aleksi Siau</div>
-                    </div>
-                </div>
-                <div class="record-row">
-                    <div class="score">-11 (49)</div>
-                    <div class="player-info">
-                        <div class="player-name">Santtu Sander</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Talma Kesä</span>
-                <span class="layout-info">2026 (18h, Par 59)</span>
-            </div>
-            <div class="leaderboard">
-                <div class="record-row">
-                    <div class="score">-9 (50)</div>
-                    <div class="player-info">
-                        <div class="player-name">Hesus Jesus</div>
-                    </div>
-                </div>
-                <div class="record-row">
-                    <div class="score">-6 (53)</div>
-                    <div class="player-info">
-                        <div class="player-name">Jonas S</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Meilahti</span>
-                <span class="layout-info">Main (16h, Par 48)</span>
-            </div>
-            <div class="leaderboard">
-                <div class="record-row">
-                    <div class="score">-11 (37)</div>
-                    <div class="player-info">
-                        <div class="player-name">Aleksi Siau</div>
-                    </div>
-                </div>
-                <div class="record-row">
-                    <div class="score">-9 (39)</div>
-                    <div class="player-info">
-                        <div class="player-name">Santtu Sander</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Tali Kesä</span>
-                <span class="layout-info">2025 (18h)</span>
-            </div>
-            <div class="leaderboard">
-                <div class="record-row">
-                    <div class="score">-2</div>
-                    <div class="player-info">
-                        <div class="player-name">Aleksi Siau</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Ford DiscGolfPark Sininen</span>
-                <span class="layout-info">(kesä 2026) väliaikainen (18h, Par 59)</span>
-            </div>
-            <div class="leaderboard">
-                <div class="record-row">
-                    <div class="score">+8 (67)</div>
-                    <div class="player-info">
-                        <div class="player-name">Karri H</div>
-                    </div>
-                </div>
-                <div class="record-row">
-                    <div class="score">+11</div>
-                    <div class="player-info">
-                        <div class="player-name">Jonas S</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div id="one-disc" class="tab-content">
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Paloheinä Disc Golf Park</span>
-                <span class="layout-info">1-Disc Challenge</span>
-            </div>
-            <div class="record-row">
-                <div class="score">E (54)</div>
-                <div class="player-info">
-                    <div class="player-name">Player Name</div>
-                    <div class="date-disc">Buzzz (Z-Line)</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="doubles" class="tab-content">
-
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Tali Kesä 2025</span>
-                <span class="layout-info">Best Shot (18h, Par 58)</span>
-            </div>
-            <div class="leaderboard">
-                <div class="record-row">
-                    <div class="score">-4 (54)</div>
-                    <div class="player-info">
-                        <div class="player-name">Ode Bisi & Karri H</div>
-                        <div class="date-disc">09/05/2026</div>
-                    </div>
-                </div>
-                <div class="record-row">
-                    <div class="score">-1 (57)</div>
-                    <div class="player-info">
-                        <div class="player-name">Aleksi Siau & Jermu #69.6</div>
-                        <div class="date-disc">09/05/2026</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Veikkola</span>
-                <span class="layout-info">Best Shot (18h, Par 57)</span>
-            </div>
-            <div class="leaderboard">
-                <div class="record-row">
-                    <div class="score">-3 (54)</div>
-                    <div class="player-info">
-                        <div class="player-name">Ode Bisi & Jonas S</div>
-                        <div class="date-disc">09/05/2026</div>
-                    </div>
-                </div>
-                <div class="record-row">
-                    <div class="score">-1 (56)</div>
-                    <div class="player-info">
-                        <div class="player-name">Karri H & Jermu #69.6</div>
-                        <div class="date-disc">09/05/2026</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="course-card">
-            <div class="course-header">
-                <span class="course-name">Ford DiscGolfPark Sininen</span>
-                <span class="layout-info">Best Shot (kesä 2026) (18h, Par 60)</span>
-            </div>
-            <div class="leaderboard">
-                <div class="record-row">
-                    <div class="score">+2 (62)</div>
-                    <div class="player-info">
-                        <div class="player-name">Tommy Islander & Samppa Mies</div>
-                        <div class="date-disc">09/05/2026</div>
-                    </div>
-                </div>
-                <div class="record-row">
-                    <div class="score">+5 (65)</div>
-                    <div class="player-info">
-                        <div class="player-name">Daniel Sparrow & Tony A</div>
-                        <div class="date-disc">09/05/2026</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
+    <div id="full-bag" class="tab-content active"></div>
+    <div id="one-disc" class="tab-content"></div>
+    <div id="doubles" class="tab-content"></div>
 
     <script>
-        function switchTab(event, tabId) {
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(content => content.classList.remove('active'));
-            
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
+
+        // HTML Builder Logic
+        function buildHTML(dataArray) {
+            if (!dataArray || dataArray.length === 0) return '<div style="text-align:center; color:var(--text-muted);">No records yet.</div>';
+            
+            return dataArray.map(course => `
+                <div class="course-card">
+                    <div class="course-header">
+                        <span class="course-name">${course.course}</span>
+                        <span class="layout-info">${course.layout}</span>
+                    </div>
+                    <div class="leaderboard">
+                        ${course.records.map(record => `
+                            <div class="record-row">
+                                <div class="score">${record.score}</div>
+                                <div class="player-info">
+                                    <div class="player-name">${record.player}</div>
+                                    ${record.detail ? `<div class="detail-text">${record.detail}</div>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Fetch Data and Render
+        async function loadRecords() {
+            try {
+                // Add a cache-buster query so mobile browsers don't load old versions
+                const response = await fetch('records.json?v=' + new Date().getTime());
+                
+                if (!response.ok) throw new Error("Network response was not ok");
+                
+                const data = await response.json();
+                
+                document.getElementById('full-bag').innerHTML = buildHTML(data.fullBag);
+                document.getElementById('one-disc').innerHTML = buildHTML(data.oneDisc);
+                document.getElementById('doubles').innerHTML = buildHTML(data.doubles);
+                
+            } catch (error) {
+                console.error("Error loading JSON:", error);
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        // Initialize App
+        loadRecords();
     </script>
 </body>
 </html>
