@@ -132,8 +132,8 @@
       "course": "Tali 2026 1-Disc Challenge Tour",
       "layout": "1-Disc Challenge",
       "records": [
-        { "score": "+13", "player": "Siltamäen Jeesus", "detail": "Envy" }
-        { "score": "+14", "player": "Aleksi Siau", "detail": "Havu" }
+        { "score": "+13", "player": "Siltamäen Jeesus", "detail": "Envy" },
+        { "score": "+14", "player": "Aleksi Siau", "detail": "Havu" },
         { "score": "+14", "player": "Jermu #69", "detail": "Envy?" }
       ]
     }
