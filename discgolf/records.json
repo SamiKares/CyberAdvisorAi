@@ -137,6 +137,13 @@
     }
   ],
   "doubles": [
+     {
+       "course": "Siltamäen Frisbeegolfrata",
+      "layout": "2024 Kesä (18h, Par 54)",
+      "records": [
+        { "score": "-14 (40)", "player": "Siltamäki Hesus & Aleski Siau", "detail": "09/05/2026" }
+      ]
+    }
     {
       "course": "Tali Kesä 2025",
       "layout": "Best Shot (18h, Par 58)",
