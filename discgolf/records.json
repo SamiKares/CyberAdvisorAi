@@ -71,6 +71,14 @@
       ]
     },
     {
+      "course": "Malminiitty",
+      "layout": "9 holes, par 27",
+      "records": [
+        { "score": "-6 (21)", "player": "Tommy Islander", "detail": "" },
+        { "score": "-5 (22)", "player": "Tauno Lepponen", "detail": "" }
+      ]
+    },
+    {
       "course": "Meilahti",
       "layout": "Main (16h, Par 48)",
       "records": [
@@ -96,6 +104,13 @@
       "layout": "Main (18h, Par 58)",
       "records": [
         { "score": "-6 (52)", "player": "Siltamäen Jeesus", "detail": "" }
+      ]
+    },
+    {
+      "course": "Orimattilan kiekkopuisto Pro",
+      "layout": "18 holes, par 59",
+      "records": [
+        { "score": "+5 (64)", "player": "Karri H", "detail": "" }
       ]
     },
     {
