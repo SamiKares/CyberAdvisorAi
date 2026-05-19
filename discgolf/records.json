@@ -1,41 +1,6 @@
 {
   "fullBag": [
     {
-      "course": "Tali Kesä",
-      "layout": "2025 (18h)",
-      "records": [
-        { "score": "-2", "player": "Aleksi Siau", "detail": "" }
-      ]
-    },
-    {
-      "course": "Varistonniitty",
-      "layout": "Main (18h, Par 60)",
-      "records": [
-        { "score": "-1 (59)", "player": "Siltamäen Jeesus", "detail": "" }
-      ]
-    },
-    {
-      "course": "Äijänpelto",
-      "layout": "Main (18h, Par 67)",
-      "records": [
-        { "score": "-1 (66)", "player": "Tauno Lepponen", "detail": "" }
-      ]
-    },
-    {
-      "course": "Paloheinä Disc Golf Park",
-      "layout": "Main 2025 (18h, Par 54)",
-      "records": [
-        { "score": "-11 (43)", "player": "Siltamäen Jeesus", "detail": "" }
-      ]
-    },
-    {
-      "course": "Siltamäen Frisbeegolfrata",
-      "layout": "2024 Kesä (18h, Par 54)",
-      "records": [
-        { "score": "-13 (41)", "player": "Siltamäen Jeesus", "detail": "" }
-      ]
-    },
-    {
       "course": "Ford Amateur DiscGolfPark",
       "layout": "Main (18h, Par 56)",
       "records": [
@@ -44,16 +9,16 @@
     },
     {
       "course": "Ford DiscGolfPark Sininen",
-      "layout": "(kesä 2026) väliaikainen (18h, Par 59)",
+      "layout": "(kesä 2026) (18h, Par 60)",
       "records": [
-        { "score": "+8 (67)", "player": "Karri H", "detail": "" }
+        { "score": "+6 (66)", "player": "Ode Bisi", "detail": "" }
       ]
     },
     {
       "course": "Ford DiscGolfPark Sininen",
-      "layout": "(kesä 2026) (18h, Par 60)",
+      "layout": "(kesä 2026) väliaikainen (18h, Par 59)",
       "records": [
-        { "score": "+6 (66)", "player": "Ode Bisi", "detail": "" }
+        { "score": "+8 (67)", "player": "Karri H", "detail": "" }
       ]
     },
     {
@@ -141,10 +106,24 @@
       ]
     },
     {
+      "course": "Paloheinä Disc Golf Park",
+      "layout": "Main 2025 (18h, Par 54)",
+      "records": [
+        { "score": "-11 (43)", "player": "Siltamäen Jeesus", "detail": "" }
+      ]
+    },
+    {
       "course": "Puolarmaari",
       "layout": "Main (20h, Par 60)",
       "records": [
         { "score": "-12 (48)", "player": "Tauno Lepponen", "detail": "" }
+      ]
+    },
+    {
+      "course": "Siltamäen Frisbeegolfrata",
+      "layout": "2024 Kesä (18h, Par 54)",
+      "records": [
+        { "score": "-13 (41)", "player": "Siltamäen Jeesus", "detail": "" }
       ]
     },
     {
@@ -155,10 +134,24 @@
       ]
     },
     {
+      "course": "Tali Kesä",
+      "layout": "2025 (18h)",
+      "records": [
+        { "score": "-2", "player": "Aleksi Siau", "detail": "" }
+      ]
+    },
+    {
       "course": "Talma Kesä",
       "layout": "2026 (18h, Par 59)",
       "records": [
         { "score": "-9 (50)", "player": "Siltamäen Jeesus", "detail": "" }
+      ]
+    },
+    {
+      "course": "Varistonniitty",
+      "layout": "Main (18h, Par 60)",
+      "records": [
+        { "score": "-1 (59)", "player": "Siltamäen Jeesus", "detail": "" }
       ]
     },
     {
@@ -174,6 +167,13 @@
       "records": [
         { "score": "-5 (56)", "player": "Jonas S", "detail": "" }
       ]
+    },
+    {
+      "course": "Äijänpelto",
+      "layout": "Main (18h, Par 67)",
+      "records": [
+        { "score": "-1 (66)", "player": "Tauno Lepponen", "detail": "" }
+      ]
     }
   ],
   "oneDisc": [
@@ -183,9 +183,32 @@
       "records": [
         { "score": "E (54)", "player": "Player Name", "detail": "Buzzz (Z-Line)" }
       ]
+    },
+    {
+      "course": "Tali 2026 1-Disc Challenge Tour",
+      "layout": "1-Disc Challenge",
+      "records": [
+        { "score": "+13", "player": "Siltamäen Jeesus", "detail": "Envy" },
+        { "score": "+14", "player": "Aleksi Siau", "detail": "Havu" },
+        { "score": "+14", "player": "Jermu #69", "detail": "Envy?" }
+      ]
     }
   ],
   "doubles": [
+    {
+      "course": "Ford DiscGolfPark Sininen",
+      "layout": "Best Shot (kesä 2026) (18h, Par 60)",
+      "records": [
+        { "score": "+2 (62)", "player": "Tommy Islander & Samppa Mies", "detail": "09/05/2026" }
+      ]
+    },
+    {
+      "course": "Siltamäen Frisbeegolfrata",
+      "layout": "2024 Kesä (18h, Par 54)",
+      "records": [
+        { "score": "-14 (40)", "player": "Siltamäen Jeesus & Aleksi Siau", "detail": "09/05/2026" }
+      ]
+    },
     {
       "course": "Tali Kesä 2025",
       "layout": "Best Shot (18h, Par 58)",
@@ -198,13 +221,6 @@
       "layout": "Best Shot (18h, Par 57)",
       "records": [
         { "score": "-3 (54)", "player": "Ode Bisi & Jonas S", "detail": "09/05/2026" }
-      ]
-    },
-    {
-      "course": "Ford DiscGolfPark Sininen",
-      "layout": "Best Shot (kesä 2026) (18h, Par 60)",
-      "records": [
-        { "score": "+2 (62)", "player": "Tommy Islander & Samppa Mies", "detail": "09/05/2026" }
       ]
     }
   ]
