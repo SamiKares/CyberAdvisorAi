@@ -11,14 +11,7 @@
       "course": "Ford DiscGolfPark Sininen",
       "layout": "(kesä 2026) (18h, Par 60)",
       "records": [
-        { "score": "+6 (66)", "player": "Ode Bisi", "detail": "" }
-      ]
-    },
-    {
-      "course": "Ford DiscGolfPark Sininen",
-      "layout": "(kesä 2026) väliaikainen (18h, Par 59)",
-      "records": [
-        { "score": "+8 (67)", "player": "Karri H", "detail": "" }
+        { "score": "-1 (50)", "player": "Ode Bisi", "detail": "" }
       ]
     },
     {
@@ -134,14 +127,14 @@
       ]
     },
     {
-      "course": "Tali Kesä",
+      "course": "Tali Kesä 2025",
       "layout": "2025 (18h)",
       "records": [
         { "score": "-2", "player": "Aleksi Siau", "detail": "" }
       ]
     },
     {
-      "course": "Talma Kesä",
+      "course": "Talma Kesä 2025",
       "layout": "2026 (18h, Par 59)",
       "records": [
         { "score": "-9 (50)", "player": "Siltamäen Jeesus", "detail": "" }
