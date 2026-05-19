@@ -35,7 +35,6 @@
             overflow-x: hidden;
         }
 
-        /* ── Background texture ── */
         body::before {
             content: '';
             position: fixed;
@@ -47,7 +46,6 @@
             z-index: 0;
         }
 
-        /* ── Disc watermark ── */
         body::after {
             content: '';
             position: fixed;
@@ -140,11 +138,17 @@
             margin-bottom: 28px;
         }
 
-        /* ── Tabs ── */
-        .tabs-wrapper {
+        /* ── Controls row ── */
+        .controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
             margin-bottom: 32px;
+            flex-wrap: wrap;
         }
 
+        /* ── Tabs ── */
         .tabs {
             display: inline-flex;
             background: var(--bg-surface);
@@ -176,6 +180,172 @@
         }
 
         .tab-btn.active {
+            background: var(--accent);
+            color: #070a0f;
+        }
+
+        /* ── Player Filter Dropdown ── */
+        .filter-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .filter-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .filter-select-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 9px 14px;
+            color: var(--text-mid);
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            white-space: nowrap;
+            min-width: 160px;
+            justify-content: space-between;
+        }
+
+        .filter-select-btn:hover,
+        .filter-select-btn.open {
+            border-color: var(--border-accent);
+            color: var(--text-main);
+        }
+
+        .filter-select-btn.has-filter {
+            border-color: var(--border-accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .filter-select-btn svg {
+            flex-shrink: 0;
+            transition: transform 0.18s ease;
+        }
+
+        .filter-select-btn.open svg {
+            transform: rotate(180deg);
+        }
+
+        .filter-dropdown {
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            min-width: 200px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-accent);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 100;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+            display: none;
+            animation: dropIn 0.16s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .filter-dropdown.open {
+            display: block;
+        }
+
+        @keyframes dropIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-option {
+            padding: 10px 16px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-mid);
+            cursor: pointer;
+            transition: all 0.12s ease;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.02em;
+        }
+
+        .filter-option:last-child {
+            border-bottom: none;
+        }
+
+        .filter-option:hover {
+            background: rgba(255,255,255,0.04);
+            color: var(--text-main);
+        }
+
+        .filter-option.selected {
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .filter-option.all-option {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .filter-option.all-option.selected {
+            color: var(--accent);
+        }
+
+        /* ── Player filter banner ── */
+        .filter-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: var(--accent-dim);
+            border: 1px solid var(--border-accent);
+            border-radius: 6px;
+            padding: 10px 16px;
+            margin-bottom: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            color: var(--accent);
+        }
+
+        .filter-banner.visible {
+            display: flex;
+        }
+
+        .filter-banner-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .clear-filter-btn {
+            background: none;
+            border: 1px solid var(--border-accent);
+            border-radius: 4px;
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-family: 'DM Sans', sans-serif;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .clear-filter-btn:hover {
             background: var(--accent);
             color: #070a0f;
         }
@@ -254,6 +424,10 @@
             transition: background 0.15s;
         }
 
+        .record-row.highlight-row {
+            background: rgba(245,197,24,0.04);
+        }
+
         .record-row:hover {
             background: rgba(255,255,255,0.02);
         }
@@ -262,7 +436,6 @@
             border-top: 1px solid var(--border);
         }
 
-        /* Gold / silver / bronze for top 3 */
         .record-row:nth-child(1) .rank-num { color: var(--accent); }
         .record-row:nth-child(2) .rank-num { color: #b0b8c4; }
         .record-row:nth-child(3) .rank-num { color: #c88040; }
@@ -301,6 +474,10 @@
             font-size: 0.9rem;
             color: var(--text-main);
             line-height: 1.2;
+        }
+
+        .player-name.matched {
+            color: var(--accent);
         }
 
         .detail-text {
@@ -362,12 +539,32 @@
 
     <div id="error-msg">⚠ Cannot load records.json — check for formatting errors (missing quotes, trailing commas).</div>
 
-    <div class="tabs-wrapper">
+    <div class="controls-row">
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('full-bag', this)">Full Bag</button>
             <button class="tab-btn" onclick="switchTab('one-disc', this)">1-Disc</button>
             <button class="tab-btn" onclick="switchTab('doubles', this)">Doubles</button>
         </div>
+
+        <div class="filter-wrapper" id="filter-wrapper">
+            <button class="filter-select-btn" id="filter-btn" onclick="toggleDropdown()">
+                <span id="filter-btn-label">All Players</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="filter-dropdown" id="filter-dropdown">
+                <!-- populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div class="filter-banner" id="filter-banner">
+        <div class="filter-banner-info">
+            <span>▸</span>
+            <span id="filter-banner-text"></span>
+        </div>
+        <button class="clear-filter-btn" onclick="setFilter(null)">Clear</button>
     </div>
 
     <div id="full-bag" class="tab-content active"></div>
@@ -379,6 +576,11 @@
 </div>
 
 <script>
+    let allData = null;
+    let activePlayer = null;
+    let dropdownOpen = false;
+
+    /* ── Tab switching ── */
     function switchTab(tabId, btn) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -386,48 +588,147 @@
         btn.classList.add('active');
     }
 
+    /* ── Dropdown toggle ── */
+    function toggleDropdown() {
+        dropdownOpen = !dropdownOpen;
+        document.getElementById('filter-dropdown').classList.toggle('open', dropdownOpen);
+        document.getElementById('filter-btn').classList.toggle('open', dropdownOpen);
+    }
+
+    function closeDropdown() {
+        dropdownOpen = false;
+        document.getElementById('filter-dropdown').classList.remove('open');
+        document.getElementById('filter-btn').classList.remove('open');
+    }
+
+    document.addEventListener('click', e => {
+        if (!document.getElementById('filter-wrapper').contains(e.target)) {
+            closeDropdown();
+        }
+    });
+
+    /* ── Extract all unique players from data ── */
+    function extractPlayers(data) {
+        const players = new Set();
+        ['fullBag', 'oneDisc', 'doubles'].forEach(key => {
+            (data[key] || []).forEach(course => {
+                course.records.forEach(r => {
+                    // For doubles, split "Player A & Player B" into individuals
+                    r.player.split('&').forEach(p => players.add(p.trim()));
+                });
+            });
+        });
+        return [...players].sort((a, b) => a.localeCompare(b));
+    }
+
+    /* ── Build dropdown options ── */
+    function buildDropdown(players) {
+        const dd = document.getElementById('filter-dropdown');
+        dd.innerHTML = `
+            <div class="filter-option all-option ${activePlayer === null ? 'selected' : ''}"
+                 onclick="setFilter(null)">All Players</div>
+            ${players.map(p => `
+                <div class="filter-option ${activePlayer === p ? 'selected' : ''}"
+                     onclick="setFilter('${p.replace(/'/g, "\\'")}')">
+                    ${p}
+                </div>
+            `).join('')}
+        `;
+    }
+
+    /* ── Set active player filter ── */
+    function setFilter(player) {
+        activePlayer = player;
+        closeDropdown();
+
+        const btn = document.getElementById('filter-btn');
+        const label = document.getElementById('filter-btn-label');
+        const banner = document.getElementById('filter-banner');
+        const bannerText = document.getElementById('filter-banner-text');
+
+        if (player) {
+            label.textContent = player;
+            btn.classList.add('has-filter');
+            banner.classList.add('visible');
+            bannerText.textContent = `Showing records for ${player}`;
+        } else {
+            label.textContent = 'All Players';
+            btn.classList.remove('has-filter');
+            banner.classList.remove('visible');
+        }
+
+        buildDropdown(extractPlayers(allData));
+        renderAll();
+    }
+
+    /* ── Build HTML for a tab section ── */
     function buildHTML(dataArray) {
         if (!dataArray || dataArray.length === 0)
             return '<div class="empty-state">No records yet.</div>';
 
-        return dataArray.map(course => `
+        // If filtering: only show courses where at least one record matches
+        let filtered = dataArray;
+        if (activePlayer) {
+            filtered = dataArray
+                .map(course => ({
+                    ...course,
+                    records: course.records.filter(r =>
+                        r.player.split('&').map(p => p.trim()).includes(activePlayer)
+                    )
+                }))
+                .filter(course => course.records.length > 0);
+        }
+
+        if (filtered.length === 0)
+            return `<div class="empty-state">No records for ${activePlayer}.</div>`;
+
+        return filtered.map(course => `
             <div class="course-card">
                 <div class="course-card-header">
                     <div class="course-name">${course.course}</div>
                     <div class="layout-badge">${course.layout}</div>
                 </div>
                 <div class="leaderboard">
-                    ${course.records.map((record, i) => `
-                        <div class="record-row">
+                    ${course.records.map((record, i) => {
+                        const isMatch = activePlayer &&
+                            record.player.split('&').map(p => p.trim()).includes(activePlayer);
+                        return `
+                        <div class="record-row${isMatch ? ' highlight-row' : ''}">
                             <div class="rank-col">
                                 <div class="rank-num">#${i + 1}</div>
                             </div>
                             <div class="score">${record.score}</div>
                             <div class="player-col">
-                                <div class="player-name">${record.player}</div>
+                                <div class="player-name${isMatch ? ' matched' : ''}">${record.player}</div>
                                 ${record.detail ? `<div class="detail-text">${record.detail}</div>` : ''}
                             </div>
-                        </div>
-                    `).join('')}
+                        </div>`;
+                    }).join('')}
                 </div>
             </div>
         `).join('');
     }
 
+    function renderAll() {
+        document.getElementById('full-bag').innerHTML = buildHTML(allData.fullBag);
+        document.getElementById('one-disc').innerHTML = buildHTML(allData.oneDisc);
+        document.getElementById('doubles').innerHTML = buildHTML(allData.doubles);
+    }
+
+    /* ── Load records ── */
     async function loadRecords() {
         try {
             const response = await fetch('records.json?v=' + Date.now());
             if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
+            allData = await response.json();
 
-            document.getElementById('full-bag').innerHTML = buildHTML(data.fullBag);
-            document.getElementById('one-disc').innerHTML = buildHTML(data.oneDisc);
-            document.getElementById('doubles').innerHTML = buildHTML(data.doubles);
-
-            const total = [data.fullBag, data.oneDisc, data.doubles]
+            const total = [allData.fullBag, allData.oneDisc, allData.doubles]
                 .flat()
                 .reduce((s, c) => s + (c?.records?.length || 0), 0);
             document.getElementById('record-count').textContent = total + ' records';
+
+            buildDropdown(extractPlayers(allData));
+            renderAll();
 
         } catch (err) {
             console.error('Error loading JSON:', err);
