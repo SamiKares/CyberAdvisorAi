@@ -72,6 +72,12 @@
             z-index: 1;
         }
 
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 28px 60px;
+            }
+        }
+
         /* ── Header ── */
         header {
             padding: 52px 0 40px;
@@ -663,80 +669,4 @@
 
     /* ── Build HTML for a tab section ── */
     function buildHTML(dataArray) {
-        if (!dataArray || dataArray.length === 0)
-            return '<div class="empty-state">No records yet.</div>';
-
-        // If filtering: only show courses where at least one record matches
-        let filtered = dataArray;
-        if (activePlayer) {
-            filtered = dataArray
-                .map(course => ({
-                    ...course,
-                    records: course.records.filter(r =>
-                        r.player.split('&').map(p => p.trim()).includes(activePlayer)
-                    )
-                }))
-                .filter(course => course.records.length > 0);
-        }
-
-        if (filtered.length === 0)
-            return `<div class="empty-state">No records for ${activePlayer}.</div>`;
-
-        return filtered.map(course => `
-            <div class="course-card">
-                <div class="course-card-header">
-                    <div class="course-name">${course.course}</div>
-                    <div class="layout-badge">${course.layout}</div>
-                </div>
-                <div class="leaderboard">
-                    ${course.records.map((record, i) => {
-                        const isMatch = activePlayer &&
-                            record.player.split('&').map(p => p.trim()).includes(activePlayer);
-                        return `
-                        <div class="record-row${isMatch ? ' highlight-row' : ''}">
-                            <div class="rank-col">
-                                <div class="rank-num">#${i + 1}</div>
-                            </div>
-                            <div class="score">${record.score}</div>
-                            <div class="player-col">
-                                <div class="player-name${isMatch ? ' matched' : ''}">${record.player}</div>
-                                ${record.detail ? `<div class="detail-text">${record.detail}</div>` : ''}
-                            </div>
-                        </div>`;
-                    }).join('')}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function renderAll() {
-        document.getElementById('full-bag').innerHTML = buildHTML(allData.fullBag);
-        document.getElementById('one-disc').innerHTML = buildHTML(allData.oneDisc);
-        document.getElementById('doubles').innerHTML = buildHTML(allData.doubles);
-    }
-
-    /* ── Load records ── */
-    async function loadRecords() {
-        try {
-            const response = await fetch('records.json?v=' + Date.now());
-            if (!response.ok) throw new Error('Network response was not ok');
-            allData = await response.json();
-
-            const total = [allData.fullBag, allData.oneDisc, allData.doubles]
-                .flat()
-                .reduce((s, c) => s + (c?.records?.length || 0), 0);
-            document.getElementById('record-count').textContent = total + ' records';
-
-            buildDropdown(extractPlayers(allData));
-            renderAll();
-
-        } catch (err) {
-            console.error('Error loading JSON:', err);
-            document.getElementById('error-msg').style.display = 'block';
-        }
-    }
-
-    loadRecords();
-</script>
-</body>
-</html>
+        if (!dataArray
