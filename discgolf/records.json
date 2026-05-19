@@ -53,7 +53,7 @@
       "course": "Ford DiscGolfPark Sininen",
       "layout": "(kesä 2026) (18h, Par 60)",
       "records": [
-        { "score": "-1 (59)", "player": "Ode Bisi", "detail": "" }
+        { "score": "+6 (66)", "player": "Ode Bisi", "detail": "" }
       ]
     },
     {
@@ -61,6 +61,20 @@
       "layout": "Main (18h, Par 58)",
       "records": [
         { "score": "-6 (52)", "player": "Siltamäen Jeesus", "detail": "" }
+      ]
+    },
+    {
+      "course": "Inkoon frisbeegolfrata",
+      "layout": "Main (18h, Par 62)",
+      "records": [
+        { "score": "-2 (60)", "player": "Siltamäen Jeesus", "detail": "" }
+      ]
+    },
+    {
+      "course": "Kaatis",
+      "layout": "Takatiit (24h, Par 83)",
+      "records": [
+        { "score": "+10 (93)", "player": "Siltamäen Jeesus", "detail": "" }
       ]
     },
     {
@@ -75,6 +89,13 @@
       "layout": "Main (18h, Par 56)",
       "records": [
         { "score": "-6 (50)", "player": "Jonas S", "detail": "" }
+      ]
+    },
+    {
+      "course": "Laakspohja Disc Golf Course",
+      "layout": "Main (18h, Par 62)",
+      "records": [
+        { "score": "-4 (58)", "player": "Tauno Lepponen", "detail": "" }
       ]
     },
     {
@@ -96,6 +117,20 @@
       "layout": "Main (16h, Par 48)",
       "records": [
         { "score": "-11 (37)", "player": "Aleksi Siau", "detail": "" }
+      ]
+    },
+    {
+      "course": "Nukarin Frisbeegolf",
+      "layout": "Rento (18h, Par 65)",
+      "records": [
+        { "score": "-6 (59)", "player": "Siltamäen Jeesus", "detail": "" }
+      ]
+    },
+    {
+      "course": "Nummelanharjun Frisbeegolfrata",
+      "layout": "Main (18h, Par 57)",
+      "records": [
+        { "score": "-2 (55)", "player": "Santtu Sander", "detail": "" }
       ]
     },
     {
@@ -125,27 +160,32 @@
       "records": [
         { "score": "-9 (50)", "player": "Siltamäen Jeesus", "detail": "" }
       ]
+    },
+    {
+      "course": "Veikkola",
+      "layout": "Main (18h, Par 57)",
+      "records": [
+        { "score": "+1 (58)", "player": "Jonas S", "detail": "" }
+      ]
+    },
+    {
+      "course": "Volls",
+      "layout": "Syksy -24 (18h, Par 61)",
+      "records": [
+        { "score": "-5 (56)", "player": "Jonas S", "detail": "" }
+      ]
     }
   ],
   "oneDisc": [
     {
-      "course": "Tali 2026 1-Disc Challenge Tour",
+      "course": "Paloheinä Disc Golf Park",
       "layout": "1-Disc Challenge",
       "records": [
-        { "score": "+13", "player": "Siltamäen Jeesus", "detail": "Envy" },
-        { "score": "+14", "player": "Aleksi Siau", "detail": "Havu" },
-        { "score": "+14", "player": "Jermu #69", "detail": "Envy?" }
+        { "score": "E (54)", "player": "Player Name", "detail": "Buzzz (Z-Line)" }
       ]
     }
   ],
   "doubles": [
-    {
-      "course": "Siltamäen Frisbeegolfrata",
-      "layout": "2024 Kesä (18h, Par 54)",
-      "records": [
-        { "score": "-14 (40)", "player": "Siltamäki Hesus & Aleski Siau", "detail": "09/05/2026" }
-      ]
-    },
     {
       "course": "Tali Kesä 2025",
       "layout": "Best Shot (18h, Par 58)",
