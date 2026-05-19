@@ -1,9 +1,8 @@
-```json
 {
   "fullBag": [
     {
       "course": "Asikkala",
-      "layout": "12 holes, par 36",
+      "layout": "Main (12h, Par 36)",
       "records": [
         {
           "score": "-8 (28)",
@@ -129,7 +128,7 @@
     },
     {
       "course": "Malminiitty",
-      "layout": "9 holes, par 27",
+      "layout": "Main (9h, Par 27)",
       "records": [
         {
           "score": "-6 (21)",
@@ -189,7 +188,7 @@
     },
     {
       "course": "Orimattilan kiekkopuisto Pro",
-      "layout": "18 holes, par 59",
+      "layout": "Main (18h, Par 59)",
       "records": [
         {
           "score": "+5 (64)",
@@ -244,10 +243,10 @@
     },
     {
       "course": "Tali Kesä 2025",
-      "layout": "2025 (18h)",
+      "layout": "2025 (18h, Par 58)",
       "records": [
         {
-          "score": "-2",
+          "score": "-2 (56)",
           "player": "Aleksi Siau",
           "detail": ""
         }
@@ -315,17 +314,17 @@
       "layout": "1-Disc Challenge",
       "records": [
         {
-          "score": "+13",
+          "score": "+13 (71)",
           "player": "Siltamäen Jeesus",
           "detail": "Envy"
         },
         {
-          "score": "+13",
-          "player": "Jermu #69",
+          "score": "+13 (71)",
+          "player": "Jermu #69.6",
           "detail": "Envy?"
         },
         {
-          "score": "+14",
+          "score": "+14 (72)",
           "player": "Aleksi Siau",
           "detail": "Havu"
         }
@@ -379,5 +378,3 @@
     }
   ]
 }
-
-```
